@@ -20,7 +20,7 @@
  */
 
 App::uses('Controller', 'Controller');
-
+App::uses('CakeEmail', 'Network/Email');
 /**
  * Application Controller
  *
@@ -31,5 +31,66 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar');
+	public $helpers = array('Minify.Minify', 'Form', 'Session', 'Html');
+	public $components = array(
+            'DebugKit.Toolbar', 'Session',
+            'Auth' => array(
+                    'loginAction' => array('controller' => 'Users', 'action' => 'signup'),
+                    'loginRedirect' => array('controller' => 'Users', 'action' => 'profile'),
+                    'logoutRedirect' => array('controller' => 'Users', 'action' => 'signup'),
+                    'authError' => 'For your security, this part of the website is protected.  Please enter your username and password to procced.  Thank You!";
+',
+                    'authenticate'      => array(
+                        'Form' 
+                    )
+            )
+        );
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->loginError = "Invalid login/password.  Please try again."; 
+    }
+
+	public function validEmail($email)
+	{
+		$pattern = "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$";
+		$ret="false";
+		if (eregi($pattern, $email))
+		{
+			$ret="true";
+		}
+		return($ret);			
+	}
+
+	public function send_email($subject, $template, $to, $type, $arrvars, $from = null, $cc = null, $attachments=null, $bcc = null) {
+        $Email = new CakeEmail();
+        $Email->emailFormat($type);
+        $Email->config('default');           
+        if($from) {
+            $Email->from(array('donotreply@ittatyou.com' => $from));    
+        } else {
+            $Email->from(array('donotreply@ittatyou.com' => __('Itattyou Customer Care')));    
+        }
+        
+        $Email->to($to);
+        if($cc) {
+            $Email->cc($cc);
+        }
+
+        if($bcc) {
+            $Email->bcc($bcc);
+        }
+
+        if($attachments) {
+            $Email->attachments($attachments);    
+        }
+
+        $Email->subject(__($subject));
+        $Email->template($template);  
+        $Email->viewVars($arrvars);
+
+        if(!$Email->send()){
+        	echo $this->Email->smtpError;die;
+        }
+        return $Email->returnPath();
+    }
 }

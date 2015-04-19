@@ -1,0 +1,16 @@
+.registrationWait
+{
+	float:left;
+	width:auto;
+	display:none;
+	margin-left:40px;
+	margin-top:10px;
+}
+.error
+{
+	color:#F00;
+	font-family: arial;
+    font-size: 10px;
+	display:none;
+	text-transform: uppercase;
+}

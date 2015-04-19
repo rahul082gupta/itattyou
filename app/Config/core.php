@@ -149,7 +149,8 @@
  *	`manager_index()` and `/manager/controller/index`
  *
  */
-	//Configure::write('Routing.prefixes', array('admin'));
+	Configure::write('Routing.prefixes', array('admin'));
+	Configure::write('MinifyAsset', true);
 
 /**
  * Turn off all caching application-wide.
@@ -384,3 +385,30 @@ Cache::config('_cake_model_', array(
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));
+
+
+// ----------------------------------------------------------MY Varibles
+
+define('HTTP_ROOT','http://'.$_SERVER['HTTP_HOST'].'/itattyou/');
+define('HTTP_ROOT_WO_WWW','https://www.'.$_SERVER['HTTP_HOST'].'/axiomtutoring/'); 
+
+define('HTTP_ROOT_ADMIN','https://'.$_SERVER['HTTP_HOST'].'/axiomtutoring/admin');
+define('HTTP_ROOT_WO_WWW_ADMIN','https://www.'.$_SERVER['HTTP_HOST'].'/axiomtutoring/admin');
+
+define('ADMIN_EMAIL',"er.abhi.dhaliwal@gmail.com");
+define('ADMIN_PHONE',"9899048319");
+define('ADMIN_NAME',"Abhi Dhaliwal");
+define('EMAIL_PATTERN',  "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$");
+define('FIELD_REQUIRED',"This field is required");
+define('INVALID_EMAIL',"Please enter valid email");
+define('LSE_EMAIL_VALIDATION',"Please enter your LSE e-mail address to register as an LSE student. If you are not LSE student select Other");
+define('EMAIL_EXISTS',"This e-mail is already in use. Please use it to sign in.");
+define('MOBILE_VALIDATION',"Mobile no. should be in digit");
+define('MOBILE_LENGTH_VALIDATION',"MOBILE NUMBER must BE comprised of 11 DIGITs (E.G 07784785411)");
+define('PASSWORD_MATCH',"The password you provided does not match. Please enter it again carefully.");
+define('PASSWORD_LENGTH_VALIDATION',"Please enter minimum 6 character password");
+define('EMAIL_NOT_EXIST',"The email your enter does not exist in our database");
+define('USER_TYPE_REQUIRED',"Please select your type");
+define('WRONG_CREDENTIALS',"Wrong E-mail or Password");
+define('FORGOT_EMAIL_NOT_EXIST',"The e-mail you provided does not exist in our database. Please check again or contact us.");
+define('ALPHABETS_ERROR',"Numbers are not allowed as characters");

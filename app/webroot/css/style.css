@@ -1,0 +1,730 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,300,800);
+
+
+/*************************
+*******Typography******
+**************************/
+
+body {
+  background: #fff;
+  font-family: 'Open Sans', sans-serif;
+  color:#4e4e4e;
+  line-height: 22px;
+}
+body, html {
+    height: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600; 
+  font-family: 'Open Sans', sans-serif;
+  color:#4e4e4e;
+}
+
+h1{
+  font-size: 36px;
+  color:#fff;
+}
+
+h2{
+  font-size: 20px;
+}
+
+h3{
+  font-size: 16px;
+  color: #787878;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+h4{
+  font-size: 16px;
+}
+
+a {
+  color: #c52d2f;
+  -webkit-transition: color 300ms, background-color 300ms;
+  -moz-transition: color 300ms, background-color 300ms;
+  -o-transition:  color 300ms, background-color 300ms;
+  transition:  color 300ms, background-color 300ms;
+}
+
+a:hover, a:focus {
+  color: #d43133;
+}
+
+hr {
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #fff;
+}
+
+@font-face {
+    font-family: '4365_1';
+    src: url('../fonts/4365_1.eot');
+    src: url('../fonts/4365_1.eot') format('embedded-opentype'),
+         url('../fonts/4365_1.woff2') format('woff2'),
+         url('../fonts/4365_1.woff') format('woff'),
+         url('../fonts/4365_1.ttf') format('truetype'),
+         url('../fonts/4365_1.svg#4365_1') format('svg');
+}
+
+.mt-10 { margin-top: 10px !important;}
+.mt-20 { margin-top: 20px !important;}
+.p0 { padding: 0 !important;}
+.p10 {padding: 10px !important}
+.p5 {padding: 5px !important;}
+.ptb10 {padding-top: 10px !important; padding-bottom: 10px !important;}
+.h100 {height: 100% !important;}
+.mt50 {margin-top: 50px;}
+.pl0 {padding-left: 0 !important;}
+.pr0 {padding-right: 0 !important;}
+.m0auto {margin: 0 auto !important;}
+.mb20 {margin-bottom: 20px !important;}
+.mt20 {margin-top: 20px !important;}
+.pb30 {padding-bottom: 30px !important;}
+.btn-primary {
+    padding: 8px 20px;
+    background: #c52d2f;
+    color: #fff;
+    border-radius: 4px;
+    border:none;
+    margin-top: 10px;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .left_container {
+        font-size: 18px;
+        height: auto !important;
+    }
+
+    .left_container blockquote {
+        bottom: 0;
+        color: #fff;
+        position: absolute;
+        bottom: 10px;
+        right: 0;
+    }
+
+    #msform fieldset {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 20px 14px !important;
+    }
+
+    .fs-title {
+        font-size: 18px !important;
+    }
+
+    .dob_text {
+        font-size: 12px !important;
+    }
+
+    .rollsign {
+      font-size: 22px !important;
+    }
+
+    .roll {
+      font-size: 18px !important;
+    }
+
+    .artist_login {
+      border: 2px solid #CCC !important;
+    }
+}
+
+.btn-primary:hover, 
+.btn-primary:focus{
+  background: #c52d2f;
+  outline: none;
+  box-shadow: none;
+} 
+
+.btn-transparent {
+  border: 3px solid #fff;
+  background: transparent;
+  color: #fff;
+}
+
+.btn-transparent:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+a:hover,
+a:focus {
+  color: #111;
+  text-decoration: none;
+  outline: none;
+}
+
+.p20 {padding: 20px !important;}
+
+
+
+.btn-gray { 
+  color: #ffffff; 
+  background-color: #8A959E; 
+  border-color: #70767A; 
+} 
+ 
+.btn-gray:hover, 
+.btn-gray:focus, 
+.btn-gray:active, 
+.btn-gray.active, 
+.open .dropdown-toggle.btn-gray { 
+  color: #ffffff; 
+  background-color: #6E747A; 
+  border-color: #70767A; 
+} 
+ 
+.btn-gray:active, 
+.btn-gray.active, 
+.open .dropdown-toggle.btn-gray { 
+  background-image: none; 
+} 
+ 
+.btn-gray.disabled, 
+.btn-gray[disabled], 
+fieldset[disabled] .btn-gray, 
+.btn-gray.disabled:hover, 
+.btn-gray[disabled]:hover, 
+fieldset[disabled] .btn-gray:hover, 
+.btn-gray.disabled:focus, 
+.btn-gray[disabled]:focus, 
+fieldset[disabled] .btn-gray:focus, 
+.btn-gray.disabled:active, 
+.btn-gray[disabled]:active, 
+fieldset[disabled] .btn-gray:active, 
+.btn-gray.disabled.active, 
+.btn-gray[disabled].active, 
+fieldset[disabled] .btn-gray.active { 
+  background-color: #8A959E; 
+  border-color: #70767A; 
+} 
+ 
+.btn-gray .badge { 
+  color: #8A959E; 
+  background-color: #ffffff; 
+}
+.btn-yellow { 
+    color: #FFF;
+    background-color: #F7B032;
+    border-color: #E39F2B;
+    width: 100%;
+    height: 48px;
+    line-height: 27px;
+    border-radius: 0;
+    border-bottom: 4px solid #C5861B;
+    font-size: 18px;
+} 
+ 
+.btn-yellow:hover, 
+.btn-yellow:focus, 
+.btn-yellow:active, 
+.btn-yellow.active, 
+.open .dropdown-toggle.btn-yellow { 
+    color: #ffffff; 
+    background-color: #DE9B28; 
+    border-color: #E39F2B; 
+} 
+ 
+.btn-yellow:active, 
+.btn-yellow.active, 
+.open .dropdown-toggle.btn-yellow { 
+    background-image: none; 
+} 
+ 
+.btn-yellow.disabled, 
+.btn-yellow[disabled], 
+fieldset[disabled] .btn-yellow, 
+.btn-yellow.disabled:hover, 
+.btn-yellow[disabled]:hover, 
+fieldset[disabled] .btn-yellow:hover, 
+.btn-yellow.disabled:focus, 
+.btn-yellow[disabled]:focus, 
+fieldset[disabled] .btn-yellow:focus, 
+.btn-yellow.disabled:active, 
+.btn-yellow[disabled]:active, 
+fieldset[disabled] .btn-yellow:active, 
+.btn-yellow.disabled.active, 
+.btn-yellow[disabled].active, 
+fieldset[disabled] .btn-yellow.active { 
+    background-color: #F7B032; 
+    border-color: #E39F2B; 
+} 
+ 
+.btn-yellow .badge { 
+  color: #F7B032; 
+  background-color: #ffffff; 
+}
+
+.btn-black { 
+  color: #ffffff; 
+  background-color: #4E5459; 
+  border-color: #3A3E42; 
+} 
+ 
+.btn-black:hover, 
+.btn-black:focus, 
+.btn-black:active, 
+.btn-black.active, 
+.open .dropdown-toggle.btn-black { 
+  color: #ffffff; 
+  background-color: #383C40; 
+  border-color: #3A3E42; 
+} 
+ 
+.btn-black:active, 
+.btn-black.active, 
+.open .dropdown-toggle.btn-black { 
+  background-image: none; 
+} 
+ 
+.btn-black.disabled, 
+.btn-black[disabled], 
+fieldset[disabled] .btn-black, 
+.btn-black.disabled:hover, 
+.btn-black[disabled]:hover, 
+fieldset[disabled] .btn-black:hover, 
+.btn-black.disabled:focus, 
+.btn-black[disabled]:focus, 
+fieldset[disabled] .btn-black:focus, 
+.btn-black.disabled:active, 
+.btn-black[disabled]:active, 
+fieldset[disabled] .btn-black:active, 
+.btn-black.disabled.active, 
+.btn-black[disabled].active, 
+fieldset[disabled] .btn-black.active { 
+  background-color: #4E5459; 
+  border-color: #3A3E42; 
+} 
+ 
+.btn-black .badge { 
+  color: #4E5459; 
+  background-color: #ffffff; 
+}
+.btn-blue { 
+  color: #FFFFFF; 
+  background-color: #3BAFDA; 
+  border-color: #2F97BD; 
+  width: 100%;
+} 
+ 
+.btn-blue:hover, 
+.btn-blue:focus, 
+.btn-blue:active, 
+.btn-blue.active, 
+.open .dropdown-toggle.btn-blue { 
+  color: #FFFFFF; 
+  background-color: #2D8BAD; 
+  border-color: #2F97BD; 
+} 
+ 
+.btn-blue:active, 
+.btn-blue.active, 
+.open .dropdown-toggle.btn-blue { 
+  background-image: none; 
+} 
+ 
+.btn-blue.disabled, 
+.btn-blue[disabled], 
+fieldset[disabled] .btn-blue, 
+.btn-blue.disabled:hover, 
+.btn-blue[disabled]:hover, 
+fieldset[disabled] .btn-blue:hover, 
+.btn-blue.disabled:focus, 
+.btn-blue[disabled]:focus, 
+fieldset[disabled] .btn-blue:focus, 
+.btn-blue.disabled:active, 
+.btn-blue[disabled]:active, 
+fieldset[disabled] .btn-blue:active, 
+.btn-blue.disabled.active, 
+.btn-blue[disabled].active, 
+fieldset[disabled] .btn-blue.active { 
+  background-color: #3BAFDA; 
+  border-color: #2F97BD; 
+} 
+ 
+.btn-blue .badge { 
+    color: #3BAFDA; 
+    background-color: #FFFFFF; 
+}
+
+
+body {
+    background-image: url(../img/background-photo.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+}
+
+
+/*form styles*/
+#msform {
+    text-align: center;
+    position: relative;
+}
+
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 10%;
+    /*stacking fieldsets above each other*/
+    position: absolute;
+    top: 46px;
+    padding-bottom: 50px;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+  display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+    padding: 14px 0 8px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: arial;
+    color: #2C3E50;
+    font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+    width: 70%;
+    background: #c93746;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 1px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+    font-size: 14px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+    background-color: #9B1522;
+    outline: none;
+    -webkit-transition: color 300ms, background-color 300ms;
+    -moz-transition: color 300ms, background-color 300ms;
+    -o-transition:  color 300ms, background-color 300ms;
+    transition:  color 300ms, background-color 300ms;
+}
+
+.btn-blue {
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 12px;
+    background: #3b5898;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    width: 100%;
+    border-radius: 0;
+}
+
+.btn-blue:hover {
+    background: #253a69;
+    text-decoration: none;
+}
+
+.btn-red {
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 12px;
+    background: #c93746;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    width: 100%;
+    border-radius: 0;
+    margin-bottom: 10px;
+}
+
+.btn-red:hover {
+    background: #a62634;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-gray-g {
+    background: #fdfdfd;
+    background-image: -webkit-linear-gradient(top, #fdfdfd, #e5e5e5);
+    background-image: -moz-linear-gradient(top, #fdfdfd, #e5e5e5);
+    background-image: -ms-linear-gradient(top, #fdfdfd, #e5e5e5);
+    background-image: -o-linear-gradient(top, #fdfdfd, #e5e5e5);
+    background-image: linear-gradient(to bottom, #fdfdfd, #e5e5e5);
+    font-family: Arial;
+    color: #3d3d3d;
+    font-size: 12px;
+    padding: 10px 20px 10px 20px;
+    border: solid #D0D0D0 2px;
+    text-decoration: none;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+.btn-gray-g:hover {
+    background: #e5e5e5;
+    background-image: -webkit-linear-gradient(top, #e5e5e5, #f5f5f5);
+    background-image: -moz-linear-gradient(top, #e5e5e5, #f5f5f5);
+    background-image: -ms-linear-gradient(top, #e5e5e5, #f5f5f5);
+    background-image: -o-linear-gradient(top, #e5e5e5, #f5f5f5);
+    background-image: linear-gradient(to bottom, #e5e5e5, #f5f5f5);
+    text-decoration: none;
+}
+/*headings*/
+.fs-title {
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #8a959e;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+    position: absolute;
+    right: 20px;
+    z-index: 100;
+    top: 70px;
+    width: 100px;
+}
+#progressbar li {
+    list-style-type: none;
+    color: white;
+    text-transform: uppercase;
+    font-size: 9px;
+    width: 50%;
+    float: left;
+    position: relative;
+}
+
+#progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 20px;
+    line-height: 20px;
+    display: block;
+    font-size: 10px;
+    color: #333;
+    background: #989797;
+    border-radius: 10px;
+    margin: 0 auto 5px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+content: none;
+}
+  /*marking active/completed steps green*/
+  /*The number of the step and the connector before it = green*/
+#progressbar li.active:before, #progressbar li.active:after {
+  background: #AE2727;
+  color: white;
+}
+
+
+.right_container {
+    position: relative;
+}
+
+.right_container .logo {
+    position: absolute;
+    right: 50%;
+    margin-right: -48px;
+    z-index: 1;
+}
+
+
+.artist {
+    padding-left: 44px !important;
+    background-position: 10px 10px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #CCC !important;
+    border-radius: 0 !important;
+    outline: none;
+}
+
+.artist_login {
+    padding-left: 44px !important;
+    background-position: 10px 10px !important;
+    border: 1px solid #CCC !important;
+    border-radius: 0 !important;
+    outline: none;
+}
+
+
+.dob_space {
+    border: 0 !important;
+    border-left: 1px solid #CCC !important;
+    border-right: 1px solid #CCC !important;
+    border-radius: 0 !important;
+    outline: none;
+}
+
+.artist_name {
+    background: url(../img/artist_icon.png) no-repeat;
+}
+
+.tattoo_name {
+    background: url(../img/studio_icon.png) no-repeat;
+}
+
+.key_name {
+    background: url(../img/key_icon.png) no-repeat;
+}
+
+.dob_icon {
+    background: url(../img/dob_icon.png) no-repeat;
+}
+
+.art_icon {
+    background: url(../img/art_icon.png) no-repeat;
+}
+
+.contact_num {
+    background: url(../img/phone_icon.png) no-repeat;
+}
+
+.email_icon {
+    background: url(../img/mail_icon.png) no-repeat;
+}
+
+.address_icon {
+    background: url(../img/address_icon.png) no-repeat;
+}
+
+.dob_box {
+    border-bottom: 1px solid #ccc;
+    padding: 0;
+}
+
+.dob_text {
+    padding-left: 0;
+    padding-top: 13px;
+    color: #8B969F;
+    font-size: 12px;
+}
+
+.select_exp {
+    border: none;
+    background: rgba(0, 0, 0, 0);
+    outline: none;
+}
+
+.button_over {
+    position: absolute;
+    bottom: -26px;
+    left: 50%;
+    margin-left: -35% !important;
+}
+
+.stepone {
+    border: 1px solid #CCC;
+    padding: 10px;
+    border-radius: 5px;
+    padding-bottom: 50px;
+}
+
+
+.blk {color: #000;}
+.exp_box {
+    height: 45px;
+    border-bottom: 1px solid #CCC;
+    padding: 0;
+}
+
+.left_container {
+    font-size: 18px;
+    height: 100vh;
+}
+
+.left_container blockquote {
+    bottom: 0;
+    color: #fff;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+}
+
+/** blockquote styles **/
+.bq3 { width: 400px; background: url('../img/blockquote_left.png') top left no-repeat; padding-left: 55px; line-height: 18px; color: #fff; border: 0;}
+.bq3 p { text-align:center; line-height: 18px; background: url('../img/blockquote_right.png') bottom right no-repeat; padding-bottom: 15px; color: #fff; font-size: 15px; }
+
+.img_upload_container {
+    position: relative;
+}
+
+.terms_n {
+  font-size: 11px;
+  text-align: center;
+  color: #464950;
+  line-height: 16px;
+  margin-top: 20px;
+  padding: 10px 12%;
+}
+
+.terms_n a {
+  font-weight: bold;
+  color: #464950;
+}
+
+.w100 {width: 100% !important;}
+
+.bdr-b {
+    border-bottom: 0 !important;
+}
+
+.rollsign {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+.roll {
+    font-size: 24px;
+    margin-top: 0;
+    color: #8a959e
+}
+
+.bullets_container {
+    position: relative;
+    height: 100px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.myAvatar {
+    position:absolute; top:0;  z-index:1; top: -67px;  right: 103px;
+}
+.file_picker_x {
+    width:50px; height:50px; position:absolute; top:0px;  z-index:2; opacity:0;top: -67px;  right: 103px;
+}
