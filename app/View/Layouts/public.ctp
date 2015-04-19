@@ -39,10 +39,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->fetch('script');
 
 		/* Load core css files */
-		echo $this->Html->css(array('bootstrap.min', 'font-awesome.min', 'animate.min' ,'prettyPhoto', 'responsive' ,'style', 'front/developer'));
+		echo $this->Html->css(array('bootstrap.min', 'bootstrap', 'font-awesome.min', 'animate.min' ,'prettyPhoto', 'responsive' ,'style', 'front/developer'));
 
 		/* Load core js files */
-		echo $this->Html->script(array('jquery', 'jquery.easing.min', 'front/front'));
+		echo $this->Html->script(array('jquery', 'jquery.easing.min', 'front/front', 'bootstrap.min'));
 	?>
 </head>
 <body>
@@ -52,10 +52,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div>
 		<div id="content">
 
-			<?php 
-				echo $this->Session->flash(); 
-				echo $this->Session->flash('auth');
+			<?php
+				echo $this->Session->flash('auth', array('element' => 'bad_flash_message')); 
+				echo $this->Session->flash('flash', array('element' => 'flash_message')); 
+				echo $this->Session->flash('bad', array('element' => 'bad_flash_message')); 
+				echo $this->Session->flash('good', array('element' => 'good_flash_message')); 
 			?>
+			
 
 			<?php echo $this->fetch('content'); ?>
 		</div>

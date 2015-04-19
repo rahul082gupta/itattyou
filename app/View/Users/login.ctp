@@ -6,14 +6,14 @@
     </div>
     <div class="col-md-6 col-sm-6 col-xs-12 right_container">
         <?php 
-                echo $this->Html->image('logo.png', array('class' => 'logo'));
-                echo $this->Form->create('User', array(
+            echo $this->Html->image('logo.png', array('class' => 'logo'));
+            echo $this->Form->create('User', array(
                             'id' => "msform", 
                             'inputDefaults' => array(
                                 'label' => false,
                                 'div'   => false
                             ),
-                            'class' => 'registration'
+                            'class' => 'login'
                         )
                     );?>
             <fieldset class="pb30">
@@ -21,20 +21,16 @@
                 <h4 class="roll"><?php echo __("TO ROLL HIM FIRST");?></h4>
                 <h6><?php echo __("Join iTattYou to find (and save!) all the things that inspire you");?>.</h6>
                 <div class="stepone_userlogin">
-                    <?php
-                        echo $this->Form->input('name', array('class' => 'required artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER NAME', 'type' => 'text'));
-                    ?>
-                    <p id="err_name" class="error"><?php if(isset($error['name'][0])) echo $error['name'][0]; ?></p>
                    
                     <?php
                         echo $this->Form->input('username', array('class' => 'email required artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
                     ?>
-                    <p id="err_username" class="error"><?php if(isset($error['username'][0])) echo $error['username'][0]; ?></p>
+                    <p id="err_username" class="error" style="display: <?php echo isset( $error['username'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['username'][0])) echo $error['username'][0]; ?></p>
                     <?php
                     
                         echo $this->Form->input('password', array('class' => 'required artist_login key_name mb20', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password'));
                     ?>
-                    <p id="err_password" class="error"><?php if(isset($error['password'][0])) echo $error['password'][0]; ?></p>
+                    <p id="err_password" class="error" style="display: <?php echo isset( $error['password'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['password'][0])) echo $error['password'][0]; ?></p>
                     <a href="" class="btn btn-red">SIGN UP FOR FREE</a>
                     <div class="text-center">Or</div>
                     <a href="#" class="btn btn-blue"><i class="fa fa-facebook"></i> Login <em>With</em> Faccebook</a>
@@ -42,11 +38,11 @@
                 </div>
                
                 <?php
-                    echo $this->Form->button(__('SIGN UP FOR FREE'), array(
+                    echo $this->Form->button(__('LOGIN'), array(
                     'class' => 'btn  btn-gray-g button_over',
                     'div' => false,
-                    'onclick'=> "return ajax_form_submit('registration',
-                        'Users/validate_user_reg_ajax',
+                    'onclick'=> "return ajax_form_submit('login',
+                        'Users/validate_user_login_ajax',
                         'registrationWait'
                     ) "
                     )

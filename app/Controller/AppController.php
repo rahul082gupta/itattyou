@@ -41,13 +41,22 @@ class AppController extends Controller {
                     'authError' => 'For your security, this part of the website is protected.  Please enter your username and password to procced.  Thank You!";
 ',
                     'authenticate'      => array(
-                        'Form' 
+                        'Form'   => array(
+                                'passwordHasher' => array(
+                                    'className' => 'Simple',
+                                    'hashType' => 'sha256'
+                                )
+                            )
                     )
             )
         );
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->loginError = "Invalid login/password.  Please try again."; 
+        if(!$this->Auth->loggedIn()) {
+            $this->Auth->authError = false;
+            $this->Session->setFlash(__('Session has expired.Please login again'), 'default', array(), 'bad');
+        }
     }
 
 	public function validEmail($email)

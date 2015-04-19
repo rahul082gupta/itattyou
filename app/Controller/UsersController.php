@@ -3,12 +3,11 @@
 	
 		public function beforeFilter() {
 			parent::beforeFilter();
-			$this->Auth->allow('signup', 'activate', 'k');
+			$this->Auth->allow('signup', 'activate', 'validate_user_reg_ajax', 'login', 'validate_user_login_ajax');
 		}
 
 
 		public function signup() {
-			CakeEmail::deliver('rahul082gupta@gmail.com', 'Subject', 'Message', array('from' => 'me@example.com'));
 			$this->layout = 'public';
 			$title_for_layout = __('Signup');	
 			if ($this->request->is('post')) {
@@ -23,11 +22,12 @@
 					    if ($this->User->save($this->request->data)) {
 					    	$id = $this->User->id;
 					    	$this->sendActivationEmail( $this->request->data['User']['name'],
-					    	  $id,  $this->request->data['User']['username']);
-					        $this->Session->setFlash(__('The user has been saved'));
-					        $this->request->data = array();
+					    	$id,  $this->request->data['User']['username']);
+					        $this->Session->setFlash(__('Welcome to itattyou. We sent you an email to verify your account. Please click the activation link there before your next login.'), 'default', array(), 'good'); 
+				    		$this->redirect( array('controller' => 'Users', 'action' => 'login'));
 					    }else {
-					    	$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+					    	$this->Session->setFlash(__('Unable to Save. Sorry we are having trouble.  Please, try again or contact support.',
+                    'default', array(), 'bad'));
 						}
 					} else {
 						$this->set('error',$error);
@@ -123,7 +123,7 @@
 	    			$this->User->save(array('User'=>array('status'=> 1)));
 	    			$this->Session->setFlash(__('Your account is now active, Please login to start building your profile ... '),
 	    			 'default', array(), 'good');
-					$this->redirect(array('controller' => 'users', 'action' => 'profile'));
+					$this->redirect( array('controller' => 'Users', 'action' => 'login'));
 				}else{
 					throw new NotFoundException();
 				}			
@@ -157,7 +157,102 @@
 			return	FULL_BASE_URL.'/users/reset_pass?id='.$id.'&token='.$this->getActivationHash($id);
 
 		}
-		public function admin_login() {
+
+		public function login() {
+			$this->layout = 'public';
+			$title_for_layout = __('Login');	
+			if ($this->request->is('post')) {
+				if(!empty($this->request->data)) {	
+					$error=array();
+					$error=$this->validate_user_login($this->request->data);
+					if(count($error)==0) { 
+						if($this->Auth->login()) {
+							if ($this->Auth->user('status') != 1) {
+								$this->sendActivationEmail($this->Auth->user('name'), $this->Auth->user('id'), $this->Auth->user('username'));
+								$this->Session->setFlash(__('Sorry, your account is not active yet.  Please check your email for our account confirmation link, or contact support'), 'default', array(), 'bad'); 
+				    		} else {
+				    			$this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+				    		}
+						} else {
+							$this->Session->setFlash($this->Auth->loginError, 'default', array(), 'bad'); 
+				    	}
+					   
+					} else {
+						$this->set('error',$error);
+					}
+			    }
+	        }
+			$this->set(compact('title_for_layout'));
+		}
+
+		function validate_user_login_ajax()
+		{
+			
+			$this->layout="";
+			$this->autoRender=false;
+			if($this->request->is('ajax'))
+			{
+				$errors_msg = null;
+				$errors=$this->validate_user_login($this->request->data);
+							
+				if ( is_array ( $this->request->data ) )
+				{
+					foreach ($this->data['User'] as $key => $value )
+					{
+						if( array_key_exists ( $key, $errors) )
+						{
+							foreach ( $errors [ $key ] as $k => $v )
+							{
+								$errors_msg .= "error|$key|$v";
+							}		
+						}
+						else 
+						{
+							$errors_msg .= "ok|$key\n";
+						}
+					}
+				}
+				echo $errors_msg;
+				die;
+			}	
+		}
+
+		function validate_user_login($data)
+		{		
+			$errors = array (); 
+			if(trim($data['User']['username']==""))
+			{
+				$errors['username'] []= __(FIELD_REQUIRED,true)."\n";
+			}
+			elseif(trim($data['User']['username'])!="")
+			{
+				$checkexistEmail=$this->User->find('count',array('conditions'=>array('username'=>$data['User']['username'])));	
+				if($this->validEmail($data['User']['username'])=='false')
+				{
+					$errors['username'] []=__(INVALID_EMAIL,true)."\n";
+				}
+				elseif(!$checkexistEmail)
+				{
+					$errors ['username'] [] = __(EMAIL_NOT_EXIST,true)."\n";	
+				}
+			}
+			
+			if(trim($data['User']['password']=="")) {
+				$errors ['password'] [] = __(FIELD_REQUIRED,true)."\n";
+			}elseif(strlen(trim($data['User']['password']))<6) {
+				$errors['password'][]= __(PASSWORD_LENGTH_VALIDATION,true)."\n";
+			}
+			if($this->Auth->login($data)) {
+			//echo 'ji'.$this->Auth->user('id');die;
+			} else {
+		//echo $this->Auth->loginError;die; 	
+			}
+			return $errors;
+			
+		}
+
+		public function profile() {
+			$this->layout = 'public';
 			
 		}
 
