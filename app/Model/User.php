@@ -12,5 +12,16 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 	        }
 	        return true;
 	    }
+
+	   	public $hasMany = array(
+	    	'UserArt' => array(
+	    		'className' => 'UserArt',
+	    		'foreignkey' => 'user_id'
+    		),
+    		'UserVideo' => array(
+	    		'className' => 'UserVideo',
+	    		'foreignkey' => 'user_id'
+    		)
+    	);
 	}
 ?>
