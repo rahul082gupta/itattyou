@@ -13,7 +13,7 @@
                                 'label' => false,
                                 'div'   => false
                             ),
-                            'class' => 'registration'
+                            'class' => 'validationengine'
                         )
                     );?>
             <fieldset class="pb30">
@@ -22,22 +22,23 @@
                 <h6><?php echo __("Join iTattYou to find (and save!) all the things that inspire you");?>.</h6>
                 <div class="stepone_userlogin">
                     <?php
-                        echo $this->Form->input('name', array('class' => 'required artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER NAME', 'type' => 'text'));
+                        echo $this->Form->input('name', array('class' => 'validate[required] artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER NAME', 'type' => 'text'));
                     ?>
                     <p id="err_name" class="error"><?php if(isset($error['name'][0])) echo $error['name'][0]; ?></p>
                    
                     <?php
-                        echo $this->Form->input('username', array('class' => 'email required artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
+                        echo $this->Form->input('username', array('class' => 'validate[required,custom[email]] artist_login artist_name bdr-b ', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
                     ?>
                     <p id="err_username" class="error"><?php if(isset($error['username'][0])) echo $error['username'][0]; ?></p>
                     <?php
                     
-                        echo $this->Form->input('password', array('class' => 'required artist_login key_name mb20', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password'));
+                        echo $this->Form->input('password', array('class' => 'validate[required] artist_login key_name mb20 ', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password' ,'minimum' => '6'));
                     ?>
                     <p id="err_password" class="error"><?php if(isset($error['password'][0])) echo $error['password'][0]; ?></p>
-                    <a href="" class="btn btn-red">SIGN UP FOR FREE</a>
+                    <a href="<?php echo Router::url(array('controller' => 'Users' ,'action' => 'social_login/Google'));?>" class="btn btn-red">Google Login</a>
+                     
                     <div class="text-center">Or</div>
-                    <a href="#" class="btn btn-blue"><i class="fa fa-facebook"></i> Login <em>With</em> Faccebook</a>
+                    <a href="<?php echo Router::url(array('controller' => 'Users' ,'action' => 'fblogin'));?>" class="btn btn-blue"><i class="fa fa-facebook"></i> Login <em>With</em> Faccebook</a>
                     <p class="terms_n">Creating an account means you’re okay with iTattYou <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
                 </div>
                
@@ -45,14 +46,10 @@
                     echo $this->Form->button(__('SIGN UP FOR FREE'), array(
                     'class' => 'btn  btn-gray-g button_over',
                     'div' => false,
-                    'onclick'=> "return ajax_form_submit('registration',
-                        'Users/validate_user_reg_ajax',
-                        'registrationWait'
-                    ) "
+                   
                     )
                     );
                 ?>
-                <div class="registrationWait"><?php echo $this->Html->image('front/wait.gif',array('height'=>'32px'));?></div>  
                </fieldset>
         <?php echo $this->Form->end();?>
     </div>

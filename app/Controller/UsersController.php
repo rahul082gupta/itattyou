@@ -1,11 +1,13 @@
 <?php
 	class UsersController extends AppController {
-	
+
+	    public $components = array('Hybridauth');
 		public function beforeFilter() {
 			parent::beforeFilter();
-			$this->Auth->allow('signup', 'activate', 'validate_user_reg_ajax', 'login', 'validate_user_login_ajax');
+			$this->Auth->allow('signup', 'activate', 'validate_user_reg_ajax', 'login', 
+				'validate_user_login_ajax', 'social_login', 'social_endpoint');
 		}
-
+     
 
 		public function signup() {
 			$this->layout = 'public';
@@ -253,8 +255,180 @@
 
 		public function profile() {
 			$this->layout = 'public';
+			if(!empty($this->request->data)) {
+					//$error=array();
+					//$error=$this->validate_user_reg($this->request->data);
+					//if(count($error)==0) {
+						pr($this->request->data);die;
+						$this->User->create();
+						$dob = $this->request->data['User']['yy'].'-'.$this->request->data['User']['mm'].'-'.$this->request->data['User']['dd'];
+					    $this->request->data['User']['dob'] = $db;
+						pr($this->request->data);die;
+					    if ($this->User->save($this->request->data)) {
+					    	$id = $this->User->id;
+					    	$this->Session->setFlash(__('Profile updated successfully.'), 'default', array(), 'good'); 
+				    		$this->redirect( array('controller' => 'Users', 'action' => 'my_profile'));
+					    }else {
+					    	$this->Session->setFlash(__('Unable to Save. Sorry we are having trouble.  Please, try again or contact support.',
+                    'default', array(), 'bad'));
+						}
+				}	
+			    if (empty($this->data)) {
+			    	$userId = $this->Session->read('Auth.User.id');
+			    	$this->request->data = $this->User->read(null, $userId);
+					$this->set('id',$this->data['User']['id']);
+		}
 			
 		}
+
+		public function page() {
+			$this->layout = 'public';
+
+		}
+
+		public function fblogin() {
+			// check user is not logged in
+			if($this->Auth->loggedIn() ) {
+				$facebook_id = $this->Facebook->isLoggedIn();
+	            if($facebook_id) {
+	            	list($facebook_id, $name)= explode('-', $facebook_id);
+	            	$user_fbinfo = $this->Facebook->processFacebookRequest('/'.$facebook_id);
+	                if($user_fbinfo['status']) {
+	                	$userInfo = $this->User->findBySocialId($user_fbinfo['message']['id']);
+	                	if($userInfo) {
+	                		$this->Auth->login($userInfo['User']); 
+                		} else {
+
+	                	}
+	                	$this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+	                	
+
+	                } else {
+	                	$this->Session->setFlash(__('Sorry, your facebook profile is not accessible.Please try again.'), 'default', array(), 'bad'); 
+				    	$this->redirect(array('controller' => 'Users', 'action' => 'signup'));
+	                }
+	        	} else {
+	                $login_url = $this->Facebook->fbLogin(HTTP_ROOT.'/Users/fblogin');
+	                die;
+	            }
+           	} else {
+           		$this->redirect(array('controller' => 'Users', 'action' => 'profile'));
+           	}
+		}
+
+		public function edit($id = null) {
+			if (!$id) {
+				$this->Session->setFlash('Please provide a user id');
+				$this->redirect(array('action'=>'index'));
+			}
+
+			$user = $this->User->findById($id);
+			if (!$user) {
+				$this->Session->setFlash('Invalid User ID Provided');
+				$this->redirect(array('action'=>'index'));
+			}
+
+			if ($this->request->is('post') || $this->request->is('put')) {
+				$this->User->id = $id;
+				if ($this->User->save($this->request->data)) {
+					$this->Session->setFlash(__('The user has been updated'));
+					$this->redirect(array('action' => 'edit', $id));
+				}else{
+					$this->Session->setFlash(__('Unable to update your user.'));
+				}
+			}
+
+			if (!$this->request->data) {
+				$this->request->data = $user;
+			}
+		}
+
+	public function logout() {
+		   
+			$this->Session->destroy();
+			$this->Auth->logout();
+		   
+			$this->redirect($this->Auth->logout());
+    	
+	}
+        
+        //START  GOOGLE LOGIN
+         	/* social login functionality */
+	public function social_login($provider) {
+		if( $this->Hybridauth->connect($provider) ){
+			$this->_successfulHybridauth($provider,$this->Hybridauth->user_profile);
+        }else{
+            // error
+			$this->Session->setFlash($this->Hybridauth->error);
+			$this->redirect($this->Auth->loginAction);
+        }
+	}
+
+	public function social_endpoint($provider) {
+		$this->Hybridauth->processEndpoint();
+	}
+	
+	private function _successfulHybridauth($provider, $incomingProfile){
+       // #1 - check if user already authenticated using this provider before
+		
+		$this->User->recursive = -1;
+		$existingProfile = $this->User->find('first', array(
+			'conditions' => array('social_network_id' => $incomingProfile['SocialProfile']['social_network_id'])
+		));
+		//pr($incomingProfile);die;
+		if ($existingProfile) {
+			// #2 - if an existing profile is available, then we set the user as connected and log them in
+			$user = $this->User->find('first', array(
+				'conditions' => array('id' => $existingProfile['User']['id'])
+			));
+			
+			$this->_doSocialLogin($user,true);
+		} else {
+			// New profile.
+			if ($this->Auth->loggedIn()) {
+				// user is already logged-in , attach profile to logged in user.
+				// create social profile linked to current user
+				$incomingProfile['User']['id'] = $this->Auth->user('id');
+				$incomingProfile['User']['name'] = $incomingProfile['SocialProfile']['first_name'];
+				pr($incomingProfile);die;
+				$this->User->save($incomingProfile);
+				
+				$this->Session->setFlash('Your ' . $incomingProfile['SocialProfile']['social_network_name'] . ' account is now linked to your account.');
+				$this->redirect($this->Auth->redirectUrl());
+
+			} else {
+				// no-one logged and no profile, must be a registration.
+				//$user = $this->User->createFromSocialProfile($incomingProfile);
+				//$incomingProfile['SocialProfile']['id'] = $incomingProfile['User']['id'];
+				$incomingProfile['User']['id'] = 11;
+				$incomingProfile['User']['username'] = $incomingProfile['SocialProfile']['first_name'];
+				$incomingProfile['User']['email'] = $incomingProfile['SocialProfile']['email'];
+				$incomingProfile['User']['social_network_id'] = $incomingProfile['SocialProfile']['social_network_id'];
+				//pr($incomingProfile);die;
+				$this->User->save($incomingProfile);
+                // pr($user);die;
+				// log in with the newly created user
+				$this->_doSocialLogin($incomingProfile);
+			}
+		}	
+	}
+	
+	private function _doSocialLogin($user, $returning = false) {
+
+		if ($this->Auth->login($user['User'])) {
+			if($returning){
+				$this->Session->setFlash(__('Welcome back, '. $this->Auth->user('username')));
+			} else {
+				$this->Session->setFlash(__('Welcome to our community, '. $this->Auth->user('username')));
+			}
+			$this->redirect($this->Auth->loginRedirect);
+			
+		} else {
+			$this->Session->setFlash(__('Unknown Error could not verify the user: '. $this->Auth->user('username')));
+		}
+	}
+
+        //END OF CODE
 
 	}
 ?>

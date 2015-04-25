@@ -36,13 +36,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->meta('icon');
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
-		echo $this->fetch('script');
+		echo $this->fetch('script'); 
 
 		/* Load core css files */
 		echo $this->Html->css(array('bootstrap.min', 'bootstrap', 'font-awesome.min', 'animate.min' ,'prettyPhoto', 'responsive' ,'style', 'front/developer'));
 
+		// custome theme of validation
+
+		echo $this->Html->css(array('validationEngine.jquery'));
+
 		/* Load core js files */
 		echo $this->Html->script(array('jquery', 'jquery.easing.min', 'front/front', 'bootstrap.min'));
+
+		// custom validations
+
+		echo $this->Html->script(array('jquery.validationEngine', 'jquery.validationEngine-en'));
 	?>
 </head>
 <body>
@@ -69,6 +77,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</p>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>
+<script type="text/javascript"> 
+    $(document).ready(function(){
+        $(".validationengine").validationEngine()   
+    }); 
+</script>

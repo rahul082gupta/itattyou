@@ -33,11 +33,11 @@ App::uses('CakeEmail', 'Network/Email');
 class AppController extends Controller {
 	public $helpers = array('Minify.Minify', 'Form', 'Session', 'Html');
 	public $components = array(
-            'DebugKit.Toolbar', 'Session',
+            'DebugKit.Toolbar', 'Session', 'Facebook.Facebook',
             'Auth' => array(
                     'loginAction' => array('controller' => 'Users', 'action' => 'signup'),
                     'loginRedirect' => array('controller' => 'Users', 'action' => 'profile'),
-                    'logoutRedirect' => array('controller' => 'Users', 'action' => 'signup'),
+                    'logoutRedirect' => array('controller' => 'Users', 'action' => 'profile'),
                     'authError' => 'For your security, this part of the website is protected.  Please enter your username and password to procced.  Thank You!";
 ',
                     'authenticate'      => array(
@@ -52,11 +52,9 @@ class AppController extends Controller {
         );
     public function beforeFilter() {
         parent::beforeFilter();
+        $this->Auth->allow('fblogin');
         $this->Auth->loginError = "Invalid login/password.  Please try again."; 
-        if(!$this->Auth->loggedIn()) {
-            $this->Auth->authError = false;
-            $this->Session->setFlash(__('Session has expired.Please login again'), 'default', array(), 'bad');
-        }
+        
     }
 
 	public function validEmail($email)

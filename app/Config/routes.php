@@ -36,6 +36,9 @@
 	);
 	Router::parseExtensions('xml', 'json');
 
+	Router::connect('/social_login/*', array( 'controller' => 'users', 'action' => 'social_login'));
+Router::connect('/social_endpoint/*', array( 'controller' => 'users', 'action' => 'social_endpoint'));
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.

@@ -35,7 +35,7 @@
                     <!-- <input type="text" name="" class="artist artist_name" placeholder="Enter Artist Name" /> -->
                     
                     <?php
-                        echo $this->Form->input('studio', array('class' => 'required artist tattoo_name', 'placeholder' => 'Tattoo Studio Name', 'type' => 'text'));
+                        echo $this->Form->input('User.studio', array('class' => 'required artist tattoo_name', 'placeholder' => 'Tattoo Studio Name', 'type' => 'text'));
                     ?>
                     <p id="err_studio" class="error" style="display: <?php echo isset( $error['studio'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['studio'][0])) echo $error['studio'][0]; ?></p>
 
@@ -91,9 +91,14 @@
                         <textarea placeholder="Address" class="artist address_icon"></textarea>
 
                     </div>
-                    <input type="button" name="next" class="next action-button button_over" value="COMPLETED & NEXT" />
+                    <!--input type="button" name="next" class="next action-button button_over" value="COMPLETED & NEXT" /-->
+                    <?php echo $this->Form->submit('COMPLETED & NEXT',array('id'=>'YourButtonName','class'=>'next action-button button_over','onclick'=>'your onclick function'));?>
                 </fieldset>
-
+                 <?php $this->Form->end();?>
+                <?php  
+                 echo $this->Form->create('User', array('action' => 'step2')
+                    );
+              ?> 
 
                 <fieldset>
                     
@@ -122,7 +127,7 @@
                         );
                     ?>
                 </fieldset>
-            </form>
+            <?php $this->Form->end();?>
         </div>
     </div>
 
