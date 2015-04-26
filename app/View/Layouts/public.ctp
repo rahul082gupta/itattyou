@@ -43,7 +43,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 		// custome theme of validation
 
-		echo $this->Html->css(array('validationEngine.jquery', 'main'));
+		echo $this->Html->css(array('validationEngine.jquery'));
 
 		/* Load core js files */
 		echo $this->Html->script(array('jquery', 'jquery.easing.min', 'front/front', 'bootstrap.min'));

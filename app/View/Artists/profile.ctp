@@ -1,3 +1,6 @@
+<?php 
+    echo $this->Html->css(array('main'));
+?>
 <style>
     body {
         background: none;
@@ -120,30 +123,28 @@
 
 
             <div class="">
-                <div class="col-md-4 col-sm-4 col-xs-4 p5">
-                    <object width="100%" height="150"
-                    data="http://youtube.com/watch?v=Q3lvhJy3mYE">
-                    </object>
-                </div>
+                <?php if($artistInfo['ArtistVideo']) {
 
-                <div class="col-md-4 col-sm-4 col-xs-4 p5">
-                    <object width="100%" height="150"
-                    data="http://www.youtube.com/v/XGSy3_Czz8k">
-                    </object>
-                </div>
-
-                <div class="col-md-4 col-sm-4 col-xs-4 p5">
-                    <object width="100%" height="150"
-                    data="http://www.youtube.com/v/XGSy3_Czz8k">
-                    </object>
-                </div>
+                        foreach($artistInfo['ArtistVideo'] as $video) {
+                 ?>
+                            <div class="col-md-4 col-sm-4 col-xs-4 p5">
+                                <object width="100%" height="150" data="<?php echo $video['video'];?>">
+                                 </object>
+                                
+                            </div>
+                        <?php } 
+                    } else { ?>
+                        <li class="col-md-6 col-sm-6 col-xs-12 p5">
+                            No Profile found.
+                        </li>
+                <?php } ?>
             </div>
         </div>
 
         <div class="col-md-12 col-sm-12 col-xs-12 top_artist">
 
             <div class="col-md-6 col-sm-6 col-xs-6">
-                <h3 class="m0"><img src="../img/brush_icon.jpg"> Top Artist</h3>
+                <h3 class="m0"><?php echo $this->Html->image('brush_icon.jpg');?> Top Artist</h3>
             </div>
 
             <div class="col-md-6 col-sm-6 col-xs-6 text-right">
@@ -160,25 +161,27 @@
 
         <div class="col-md-12 col-sm-12 col-xs-12 right_part">
             <div class="user_image_in">
-                <img src="../img/portfolio1.jpg" class="img-responsive" width="150">
+                
+                 <?php echo $this->Html->image($artistInfo['Artist']['photo'], array('class' => 'img-responsive', 'width' => '150'));?>
             </div>
 
-            <h2>Name here</h2>
-            <h3>Tattoo, sketch, painiting etc</h3>
+            <h2><?php echo $artistInfo['Artist']['name'];?></h2>
+            <h3><?php echo $artistInfo['Artist']['speciality'];?></h3>
             <hr>
-            <h4>ABC tattooz</h4>
-            <h5>9A & 12, Hauz Khas Village, New Delhi</h5>
-            <h1>011 33105944, 84688888888</h1>
-            <h5>www.abctattoz.com</h5>
-
-
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.0669913102!2d77.24097299999998!3d28.56775099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce3b2aef30497%3A0xde1236c2b20e22af!2s3C&#39;s!5e0!3m2!1sen!2sin!4v1429784670826" width="100%" height="150" frameborder="0" style="border:0"></iframe>
-
-
+            <h4><?php echo $artistInfo['Artist']['studio'];?></h4>
+            <h5><?php echo $artistInfo['Artist']['address'];?></h5>
+            <h1><?php echo $artistInfo['Artist']['contact'];?></h1>
+            <h5><?php echo $artistInfo['Artist']['website'];?> </h5>
+            <iframe width="100%" height="150"  frameborder="0" style="border:0"
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdpCZUhoD991anf8T1CAhT74uWQJsafiw
+            &q=<?php echo $artistInfo['Artist']['address'] ?>" >
+            </iframe>
 
             <hr>
 
-            <div class="text-left">Cast <img src="../img/cast_icon.png"></div>
+            <div class="text-left">Cast 
+                <?php echo $this->Html->image('cast_icon.png');?>
+            </div>
             <p class="text-left">Rs. 1500 first inch 500 other inches</p>
 
             <div class="text-left"><a href="#" class="btn btn-default ">Booking Now</a></div>
@@ -188,7 +191,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12 top_artist">
 
             <div class="col-md-6 col-sm-6 col-xs-6">
-                <h3 class="m0"><img src="../img/brush_icon.jpg"> Top Artist</h3>
+                <h3 class="m0"><?php echo $this->Html->image('brush_icon.jpg');?> Top Artist</h3>
             </div>
 
             <div class="col-md-6 col-sm-6 col-xs-6 text-right">

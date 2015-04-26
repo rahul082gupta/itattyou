@@ -288,18 +288,24 @@
 
 		public function fblogin() {
 			// check user is not logged in
-			if($this->Auth->loggedIn() ) {
+			if(!$this->Auth->loggedIn() ) {
 				$facebook_id = $this->Facebook->isLoggedIn();
 	            if($facebook_id) {
 	            	list($facebook_id, $name)= explode('-', $facebook_id);
 	            	$user_fbinfo = $this->Facebook->processFacebookRequest('/'.$facebook_id);
 	                if($user_fbinfo['status']) {
-	                	$userInfo = $this->User->findBySocialId($user_fbinfo['message']['id']);
+	                	$userInfo = $this->User->findByFacebookId($user_fbinfo['message']['id']);
+	                	
 	                	if($userInfo) {
 	                		$this->Auth->login($userInfo['User']); 
                 		} else {
-
+                			$facebookdata['name'] = $user_fbinfo['message']['name'];
+                			$facebookdata['facebook_id'] = $user_fbinfo['message']['id'];
+                			$this->User->save($facebookdata);
+                			$this->Auth->login($facebookdata); 
+                			$this->Session->write('Auth.User.id', $this->User->id);
 	                	}
+	                	
 	                	$this->redirect(array('controller' => 'Users', 'action' => 'profile'));
 	                	
 
