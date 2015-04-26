@@ -27,7 +27,7 @@
                     <p id="err_name" class="error"><?php if(isset($error['name'][0])) echo $error['name'][0]; ?></p>
                    
                     <?php
-                        echo $this->Form->input('username', array('class' => 'validate[required,custom[email]] artist_login artist_name bdr-b ', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
+                        echo $this->Form->input('username', array('class' => 'validate[required,custom[email],ajax[ajaxUserCall]] artist_login artist_name bdr-b ', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
                     ?>
                     <p id="err_username" class="error"><?php if(isset($error['username'][0])) echo $error['username'][0]; ?></p>
                     <?php

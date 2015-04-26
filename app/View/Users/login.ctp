@@ -31,9 +31,9 @@
                         echo $this->Form->input('password', array('class' => 'required artist_login key_name mb20', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password'));
                     ?>
                     <p id="err_password" class="error" style="display: <?php echo isset( $error['password'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['password'][0])) echo $error['password'][0]; ?></p>
-                    <a href="" class="btn btn-red">SIGN UP FOR FREE</a>
+                    <a href="<?php echo Router::url(array('controller' => 'Users' ,'action' => 'social_login/Google'));?>" class="btn btn-red">Google Login</a>
                     <div class="text-center">Or</div>
-                    <a href="#" class="btn btn-blue"><i class="fa fa-facebook"></i> Login <em>With</em> Faccebook</a>
+                   <a href="<?php echo Router::url(array('controller' => 'Users' ,'action' => 'fblogin'));?>" class="btn btn-blue"><i class="fa fa-facebook"></i> Login <em>With</em> Faccebook</a>
                     <p class="terms_n">Creating an account means you’re okay with iTattYou <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
                 </div>
                

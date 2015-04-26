@@ -147,9 +147,9 @@
                 },
                 // --- CUSTOM RULES -- Those are specific to the demos, they can be removed or changed to your likings
                 "ajaxUserCall": {
-                    "url": "ajaxValidateFieldUser",
+                    "url": "/itattyou/Users/checkemail",
                     // you may want to pass extra data on the ajax call
-                    "extraData": "name=eric",
+                    //"extraData": "name=eric",
                     "alertText": "* This user is already taken",
                     "alertTextLoad": "* Validating, please wait"
                 },

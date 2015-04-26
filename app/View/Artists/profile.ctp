@@ -173,7 +173,7 @@
             <h1><?php echo $artistInfo['Artist']['contact'];?></h1>
             <h5><?php echo $artistInfo['Artist']['website'];?> </h5>
             <iframe width="100%" height="150"  frameborder="0" style="border:0"
-          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdpCZUhoD991anf8T1CAhT74uWQJsafiw
+          src="https://www.google.com/maps/embed/v1/place?key=<?php echo GOOGLE_API_KEY;?>
             &q=<?php echo $artistInfo['Artist']['address'] ?>" >
             </iframe>
 

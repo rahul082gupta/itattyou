@@ -416,3 +416,9 @@ define('ALPHABETS_ERROR',"Numbers are not allowed as characters");
 define('APP_ID', '663788640333307');
 define('API_KEY', '663788640333307');
 define('APP_SECRET', '34f63900d92ca0684f56ab92eb6e2d59');
+
+if($_SERVER['HTTP_HOST'] == 'localhost') {
+	define('GOOGLE_API_KEY', 'AIzaSyCdpCZUhoD991anf8T1CAhT74uWQJsafiw');
+} else {
+
+}

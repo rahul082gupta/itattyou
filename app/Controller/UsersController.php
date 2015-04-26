@@ -5,7 +5,7 @@
 		public function beforeFilter() {
 			parent::beforeFilter();
 			$this->Auth->allow('signup', 'activate', 'validate_user_reg_ajax', 'login', 
-				'validate_user_login_ajax', 'social_login', 'social_endpoint');
+				'validate_user_login_ajax', 'social_login', 'social_endpoint', 'checkemail');
 		}
      
 
@@ -396,10 +396,11 @@
 				// create social profile linked to current user
 				$incomingProfile['User']['id'] = $this->Auth->user('id');
 				$incomingProfile['User']['name'] = $incomingProfile['SocialProfile']['first_name'];
-				pr($incomingProfile);die;
+				$incomingProfile['User']['email'] = $incomingProfile['SocialProfile']['email'];
+				$incomingProfile['User']['photo'] = $incomingProfile['SocialProfile']['picture'];
 				$this->User->save($incomingProfile);
-				
-				$this->Session->setFlash('Your ' . $incomingProfile['SocialProfile']['social_network_name'] . ' account is now linked to your account.');
+				$this->Session->setFlash(__('Your ' . $incomingProfile['SocialProfile']['social_network_name'] . ' account is now linked to your account.'),
+	                    'default', array(), 'good');
 				$this->redirect($this->Auth->redirectUrl());
 
 			} else {
@@ -434,7 +435,28 @@
 		}
 	}
 
-        //END OF CODE
+    //END OF CODE
 
-	}
+    public function checkemail() {
+    	$this->autoRender = false;
+    	$this->autoLayout = false;
+    	$data = $this->request->query;
+    	$result = array($data['fieldId'], 0, 'Invalid request.');
+    	if(isset($data['fieldValue'])) {
+	    	$checkexistEmail=$this->User->find('count',array('conditions'=>array('username'=>$data['fieldValue'])));	
+			if($this->validEmail($data['fieldValue'])=='false')
+			{
+				$result = array($data['fieldId'], 0, INVALID_EMAIL);
+			}
+			elseif($checkexistEmail)
+			{
+				$result = array($data['fieldId'], 0, EMAIL_EXISTS); 
+			}else {
+				$result = array($data['fieldId'], 1); 
+			}
+		}
+		echo json_encode($result);
+    }
+
+}
 ?>

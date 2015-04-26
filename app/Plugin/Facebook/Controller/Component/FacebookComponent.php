@@ -17,7 +17,7 @@ use Facebook\FacebookRequestException;
 use Facebook\FacebookAuthorizationException;
 use Facebook\GraphObject;
 use Facebook\GraphUser; 
-
+//session_start();
 class FacebookComponent extends Component {
 	public $facebookObj;
 	public $facebookSession;
