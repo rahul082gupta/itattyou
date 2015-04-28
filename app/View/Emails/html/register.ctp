@@ -42,7 +42,7 @@
 						<b style="vertical-align: super;color: #222121;">Powered by &nbsp; </b>
 						<?php 
 							 echo $this->Html->link(
-							    $this->Html->image('http://www.snaplion.com/landingpages/logoTheme.png', array('alt' => 'ittatyou', 'width' => '105', 'height' => '27', 'style' => 'margin-top:10px;')),
+							    $this->Html->image('http://static.snaplion.com/1104/Photo/JnvGtvVjTwSp278046wK_logo.png', array('alt' => 'ittatyou', 'width' => '105', 'height' => '27', 'style' => 'margin-top:10px;')),
 							    '/',
 							    array('escapeTitle' => false, 'target' => '_blank"')
 							);

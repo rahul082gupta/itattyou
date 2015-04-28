@@ -68,11 +68,15 @@
         <div class="follower_container">
             <div class="col-md-2 col-sm-2 col-xs-12">
                 <div class="follow">Follower</div>
-                <div class="follow_numbers">1252</div>
+                <div class="follow_numbers follow_count">
+                <?php 
+                    echo count($artistInfo['ArtistFollower']);
+                ?>
+            </div>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
                 <div class="follow">Following</div>
-                <div class="follow_numbers">150</div>
+                <div class="follow_numbers"><?php echo count($artistInfo['ArtistFollowing']);?></div>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
                 <div class="follow">Project Views</div>
@@ -80,10 +84,27 @@
 
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
-                <a href="" class="btn btn-info pull-right">Follow</a>
+                <?php 
+                    $followers = array();
+                    if($artistInfo['ArtistFollower']) {
+                        $followers = Set::combine($artistInfo['ArtistFollower'], '{n}.id', '{n}.follower_id');
+                    }
+                   
+                    if(array_search($this->Session->read('Auth.User.id'), $followers) ) { 
+                        $index = array_search($this->Session->read('Auth.User.id'), $followers) ;
+                    ?>
+                       <div class="btn btn-info pull-right follow_btn" id = "<?php echo $index ;?>" rel = "1" userid = "<?php echo $artistInfo['Artist']['id'];?>">
+                            Following
+                        </div>
+
+                <?php } else { ?>
+                        <div class="btn btn-info pull-right follow_btn" id = "" rel = "0" userid = "<?php echo $artistInfo['Artist']['id'];?>">
+                            Follow
+                        </div>
+                <?php } ?>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
-                <a href="" class="btn btn-default pull-left">Contact Artist</a>
+                <a href='<?php echo HTTP_ROOT."Artists/contact_artist/{$artistInfo['Artist']['id']}";?>' class="btn btn-default pull-left">Contact Artist</a>
             </div>
         </div> 
 
@@ -172,10 +193,10 @@
             <h5><?php echo $artistInfo['Artist']['address'];?></h5>
             <h1><?php echo $artistInfo['Artist']['contact'];?></h1>
             <h5><?php echo $artistInfo['Artist']['website'];?> </h5>
-            <iframe width="100%" height="150"  frameborder="0" style="border:0"
+            <!-- <iframe width="100%" height="150"  frameborder="0" style="border:0"
           src="https://www.google.com/maps/embed/v1/place?key=<?php echo GOOGLE_API_KEY;?>
             &q=<?php echo $artistInfo['Artist']['address'] ?>" >
-            </iframe>
+            </iframe> -->
 
             <hr>
 
@@ -204,5 +225,23 @@
 <script>
     $(document).ready(function(){
         $("[rel^='lightbox']").prettyPhoto();
+        $(document.body).on('click', '.follow_btn', function() {
+            var id = $(this).attr('id'), type = $(this).attr('rel'), user_id = $(this).attr('userid');
+            $.post('<?php echo HTTP_ROOT;?>artists/follow.json', { id: id, type:type, userid : user_id}, function(response) {
+                if(response.result.status == '1') {
+                    $('.follow_btn').attr('id', response.result.id);
+                    $('.follow_btn').attr('rel',response.result.val);
+                    $('.follow_count').text(response.result.count);
+                    $('.follow_btn').text(response.result.button);
+                } else {
+                    $('div.container.container_error').remove();
+                    $('div#content').prepend("<div class='container container_error'><div class='row'><div data-alert class='alert alert-error alert-danger'>"+ response.result.error +"<button type='button' class='close' data-dismiss='alert'>×</button></div></div></div>");
+                    $(window).scrollTop(0,0);
+                }
+                
+            });
+        });
+
     });
 </script>
+

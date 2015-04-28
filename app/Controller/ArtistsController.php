@@ -23,9 +23,12 @@
 							'contain' => array(
 								'ArtistArt' => array('fields' => array('image')),
 								'ArtistVideo' => array('fields' => array('video', 'type')),
+								'ArtistFollower' => array('follower_id', 'id'), 
+								'ArtistFollowing' => array('following_id', 'id')
 							)
 						)
 					);
+					
 				}
 				if(isset($artistInfo['ArtistVideo']) && $artistInfo['ArtistVideo']) {
 					foreach($artistInfo['ArtistVideo'] as &$video) {
@@ -42,6 +45,37 @@
 	                    'default', array(), 'bad'));
 				$this->redirect(array('controller' => 'users' ,'action' => 'profile'));
 			}
+		}
+
+		public function follow() {
+			$result = array('status' => '0', 'error' => 'Invalid request.Please try again.');
+			if($this->request->data) {
+				$data = $this->request->data;
+				if(!$data['id'] && $data['type'] == 0 && $data['userid']) {
+					$follerinfo = array('follower_id' => $this->Auth->user('id'), 'user_id' => $data['userid']);
+					$this->Artist->ArtistFollower->save($follerinfo);
+					$artist_follower = $this->Artist->ArtistFollower->find('count', array(
+								'conditions' => array(
+									'ArtistFollower.user_id' => $data['userid']
+								)
+							)
+					);
+					$result = array('status' => '1', 'id' => $this->Artist->ArtistFollower->id, 'val' => '1'
+						, 'count' => $artist_follower, 'button' => 'Following');
+				}elseif($data['id'] && $data['userid']) {
+					$this->Artist->ArtistFollower->delete($data['id']);
+					$artist_follower = $this->Artist->ArtistFollower->find('count', array(
+								'conditions' => array(
+									'ArtistFollower.user_id' => $data['userid']
+								)
+							)
+					);
+					$result = array('status' => '1', 'id' => '', 'val' => '0', 'count' => $artist_follower
+						, 'button' => 'Follow');
+				}
+			}
+			$this->set('result', $result);
+        	$this->set('_serialize', array('result'));
 		}
 	}
 ?>

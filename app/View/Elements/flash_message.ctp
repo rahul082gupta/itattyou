@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container container">
 	<div class="row">
 		<div data-alert class="alert alert-error alert-danger">
 			<?php echo $message; ?>

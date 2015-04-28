@@ -11,8 +11,16 @@ App::uses('AppModel', 'Model');
     		),
     		'ArtistVideo' => array(
 	    		'className' => 'UserVideo',
+	    		'foreignkey' => 'follower_id'
+    		),
+    		'ArtistFollower' => array(
+	    		'className' => 'UserFollower',
 	    		'foreignkey' => 'user_id'
-    		)
+    		),
+    		'ArtistFollowing' => array(
+	    		'className' => 'UserFollowing',
+	    		'foreignkey' => 'user_id'
+    		),
     	);
 	}
 ?>

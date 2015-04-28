@@ -33,7 +33,7 @@ App::uses('CakeEmail', 'Network/Email');
 class AppController extends Controller {
 	public $helpers = array('Minify.Minify', 'Form', 'Session', 'Html');
 	public $components = array(
-            'DebugKit.Toolbar', 'Session', 'Facebook.Facebook',
+            'DebugKit.Toolbar', 'Session', 'Facebook.Facebook', 'RequestHandler',
             'Auth' => array(
                     'loginAction' => array('controller' => 'Users', 'action' => 'signup'),
                     'loginRedirect' => array('controller' => 'Users', 'action' => 'profile'),
@@ -69,7 +69,7 @@ class AppController extends Controller {
 	}
 
 	public function send_email($subject, $template, $to, $type, $arrvars, $from = null, $cc = null, $attachments=null, $bcc = null) {
-        $Email = new CakeEmail();
+        $Email = new CakeEmail(); 
         $Email->emailFormat($type);
         $Email->config('default');           
         if($from) {
@@ -99,5 +99,33 @@ class AppController extends Controller {
         	echo $this->Email->smtpError;die;
         }
         return $Email->returnPath();
+    }
+
+    public function contact_artist($id = NULL) {
+        $this->loadModel('User');
+        if ($this->User->exists($id)) {
+            $this->User->recursive = '-1';
+            $artistInfo = $this->User->findById($id);
+            if($artistInfo && $artistInfo['User']['email']) {
+               $to = $artistInfo['User']['email'];
+               $subject = "Itattyou Contact Person";
+               $template = 'contact_artist';
+               $type = 'html';
+               $arrvars['leadData'] = array(
+                                    'name' => $this->Auth->user('name'),
+                                    'email' => $this->Auth->user('email'),
+                                    'phone' => $this->Auth->user('contact')
+                                    );
+               $arrvars['artist'] = $artistInfo['User']['name'];
+               
+               $this->send_email($subject, $template, $to, $type, $arrvars);
+               $this->Session->setFlash(__('Thanks for contacting.'),
+                     'default', array(), 'good');
+            }else {
+                 $this->Session->setFlash(__('Invalid email.Please try again'),
+                     'default', array(), 'good');
+            }
+        } 
+        $this->redirect($this->referer());
     }
 }
