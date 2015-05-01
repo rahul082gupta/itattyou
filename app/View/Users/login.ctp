@@ -13,7 +13,7 @@
                                 'label' => false,
                                 'div'   => false
                             ),
-                            'class' => 'login'
+                            'class' => 'validationengine'
                         )
                     );?>
             <fieldset class="pb30">
@@ -23,12 +23,12 @@
                 <div class="stepone_userlogin">
                    
                     <?php
-                        echo $this->Form->input('username', array('class' => 'email required artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
+                        echo $this->Form->input('username', array('class' => 'validate[required,custom[email]] artist_login artist_name bdr-b mt20', 'placeholder' => 'ENTER EMAIL', 'type' => 'text'));
                     ?>
                     <p id="err_username" class="error" style="display: <?php echo isset( $error['username'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['username'][0])) echo $error['username'][0]; ?></p>
                     <?php
                     
-                        echo $this->Form->input('password', array('class' => 'required artist_login key_name mb20', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password'));
+                        echo $this->Form->input('password', array('class' => 'validate[required] artist_login key_name mb20', 'placeholder' => 'ENTER PASSWORD', 'type' => 'password'));
                     ?>
                     <p id="err_password" class="error" style="display: <?php echo isset( $error['password'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['password'][0])) echo $error['password'][0]; ?></p>
                     <a href="<?php echo Router::url(array('controller' => 'Users' ,'action' => 'social_login/Google'));?>" class="btn btn-red">Google Login</a>
@@ -41,10 +41,7 @@
                     echo $this->Form->button(__('LOGIN'), array(
                     'class' => 'btn  btn-gray-g button_over',
                     'div' => false,
-                    'onclick'=> "return ajax_form_submit('login',
-                        'Users/validate_user_login_ajax',
-                        'registrationWait'
-                    ) "
+                   
                     )
                     );
                 ?>

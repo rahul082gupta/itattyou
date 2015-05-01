@@ -4,8 +4,8 @@
 	    public $components = array('Hybridauth');
 		public function beforeFilter() {
 			parent::beforeFilter();
-			$this->Auth->allow('signup', 'activate', 'validate_user_reg_ajax', 'login', 
-				'validate_user_login_ajax', 'social_login', 'social_endpoint', 'checkemail');
+			$this->Auth->allow('signup', 'activate', 'login', 
+			 'social_login', 'social_endpoint', 'checkemail');
 		}
      
 
@@ -13,98 +13,25 @@
 			$this->layout = 'public';
 			$title_for_layout = __('Signup');	
 			if ($this->request->is('post')) {
-				if(!empty($this->request->data)) {	
-					$error=array();
-					$error=$this->validate_user_reg($this->request->data);
-					if(count($error)==0) {
-						$this->User->create();
-					    if(!isset($this->request->data['User']['role'])) {
-					    	$this->request->data['User']['role'] = 1;
-					    }
-					    if ($this->User->save($this->request->data)) {
-					    	$id = $this->User->id;
-					    	$this->sendActivationEmail( $this->request->data['User']['name'],
-					    	$id,  $this->request->data['User']['username']);
-					        $this->Session->setFlash(__('Welcome to itattyou. We sent you an email to verify your account. Please click the activation link there before your next login.'), 'default', array(), 'good'); 
-				    		$this->redirect( array('controller' => 'Users', 'action' => 'login'));
-					    }else {
-					    	$this->Session->setFlash(__('Unable to Save. Sorry we are having trouble.  Please, try again or contact support.',
-                    'default', array(), 'bad'));
-						}
-					} else {
-						$this->set('error',$error);
+				if(!empty($this->request->data)) {
+					$this->User->create();
+					if(!isset($this->request->data['User']['role'])) {
+					$this->request->data['User']['role'] = 1;
 					}
+					if ($this->User->save($this->request->data)) {
+					  	$id = $this->User->id;
+					   	$this->sendActivationEmail( $this->request->data['User']['name'],
+					    $id,  $this->request->data['User']['username']);
+					    $this->Session->setFlash(__('Welcome to itattyou. We sent you an email to verify your account. Please click the activation link there before your next login.'), 'default', array(), 'good'); 
+				    	$this->redirect( array('controller' => 'Users', 'action' => 'login'));
+					}else {
+					    $this->Session->setFlash(__('Unable to Save. Sorry we are having trouble.  Please, try again or contact support.',
+                    'default', array(), 'bad'));
+					}
+					
 			    }
 	        }
 			$this->set(compact('title_for_layout'));
-		}
-
-		function validate_user_reg_ajax()
-		{
-			
-			$this->layout="";
-			$this->autoRender=false;
-			if($this->request->is('ajax'))
-			{
-				$errors_msg = null;
-				$errors=$this->validate_user_reg($this->request->data);
-							
-				if ( is_array ( $this->request->data ) )
-				{
-					foreach ($this->data['User'] as $key => $value )
-					{
-						if( array_key_exists ( $key, $errors) )
-						{
-							foreach ( $errors [ $key ] as $k => $v )
-							{
-								$errors_msg .= "error|$key|$v";
-							}		
-						}
-						else 
-						{
-							$errors_msg .= "ok|$key\n";
-						}
-					}
-				}
-				echo $errors_msg;
-				die;
-			}	
-		}
-
-		function validate_user_reg($data)
-		{		
-			$errors = array ();
-			if(trim($data['User']['name']==""))
-			{
-				$errors['name'] []= __(FIELD_REQUIRED,true)."\n";
-			}
-			if(trim($data['User']['username']==""))
-			{
-				$errors['username'] []= __(FIELD_REQUIRED,true)."\n";
-			}
-			elseif(trim($data['User']['username'])!="")
-			{
-				$checkexistEmail=$this->User->find('count',array('conditions'=>array('username'=>$data['User']['username'])));	
-				if($this->validEmail($data['User']['username'])=='false')
-				{
-					$errors['username'] []=__(INVALID_EMAIL,true)."\n";
-				}
-				elseif($checkexistEmail>0)
-				{
-					$errors ['username'] [] = __(EMAIL_EXISTS,true)."\n";	
-				}
-			}
-			
-			if(trim($data['User']['password']==""))
-			{
-				$errors ['password'] [] = __(FIELD_REQUIRED,true)."\n";
-			}
-			elseif(strlen(trim($data['User']['password']))<6)
-			{
-				$errors['password'][]= __(PASSWORD_LENGTH_VALIDATION,true)."\n";
-			}
-			return $errors;
-			
 		}
 
 		public function sendActivationEmail ($name, $id, $email) {
@@ -164,10 +91,14 @@
 			$this->layout = 'public';
 			$title_for_layout = __('Login');	
 			if ($this->request->is('post')) {
-				if(!empty($this->request->data)) {	
-					$error=array();
-					$error=$this->validate_user_login($this->request->data);
-					if(count($error)==0) { 
+				if(!empty($this->request->data)) {
+					$checkuser = $this->User->find('count',
+						array(
+							'conditions' => array(
+								'User.username' => $this->request->data['User']['username']
+							)
+						));
+					if($checkuser) {
 						if($this->Auth->login()) {
 							if ($this->Auth->user('status') != 1) {
 								$this->sendActivationEmail($this->Auth->user('name'), $this->Auth->user('id'), $this->Auth->user('username'));
@@ -178,106 +109,43 @@
 						} else {
 							$this->Session->setFlash($this->Auth->loginError, 'default', array(), 'bad'); 
 				    	}
-					   
-					} else {
-						$this->set('error',$error);
-					}
+			    	}
+			    } else {
+			    	$this->Session->setFlash(__('Invalid request.Please try again'), 'default', array(), 'bad'); 
 			    }
 	        }
 			$this->set(compact('title_for_layout'));
 		}
 
-		function validate_user_login_ajax()
-		{
-			
-			$this->layout="";
-			$this->autoRender=false;
-			if($this->request->is('ajax'))
-			{
-				$errors_msg = null;
-				$errors=$this->validate_user_login($this->request->data);
-							
-				if ( is_array ( $this->request->data ) )
-				{
-					foreach ($this->data['User'] as $key => $value )
-					{
-						if( array_key_exists ( $key, $errors) )
-						{
-							foreach ( $errors [ $key ] as $k => $v )
-							{
-								$errors_msg .= "error|$key|$v";
-							}		
-						}
-						else 
-						{
-							$errors_msg .= "ok|$key\n";
-						}
-					}
-				}
-				echo $errors_msg;
-				die;
-			}	
-		}
-
-		function validate_user_login($data)
-		{		
-			$errors = array (); 
-			if(trim($data['User']['username']==""))
-			{
-				$errors['username'] []= __(FIELD_REQUIRED,true)."\n";
-			}
-			elseif(trim($data['User']['username'])!="")
-			{
-				$checkexistEmail=$this->User->find('count',array('conditions'=>array('username'=>$data['User']['username'])));	
-				if($this->validEmail($data['User']['username'])=='false')
-				{
-					$errors['username'] []=__(INVALID_EMAIL,true)."\n";
-				}
-				elseif(!$checkexistEmail)
-				{
-					$errors ['username'] [] = __(EMAIL_NOT_EXIST,true)."\n";	
-				}
-			}
-			
-			if(trim($data['User']['password']=="")) {
-				$errors ['password'] [] = __(FIELD_REQUIRED,true)."\n";
-			}elseif(strlen(trim($data['User']['password']))<6) {
-				$errors['password'][]= __(PASSWORD_LENGTH_VALIDATION,true)."\n";
-			}
-			if($this->Auth->login($data)) {
-			//echo 'ji'.$this->Auth->user('id');die;
-			} else {
-		//echo $this->Auth->loginError;die; 	
-			}
-			return $errors;
-			
-		}
-
 		public function profile() {
+			$this->loadModel('Tatoo');
 			$this->layout = 'public';
-			if(!empty($this->request->data)) {
-					//$error=array();
-					//$error=$this->validate_user_reg($this->request->data);
-					//if(count($error)==0) {
-						pr($this->request->data);die;
-						$this->User->create();
-						$dob = $this->request->data['User']['yy'].'-'.$this->request->data['User']['mm'].'-'.$this->request->data['User']['dd'];
-					    $this->request->data['User']['dob'] = $db;
-						pr($this->request->data);die;
-					    if ($this->User->save($this->request->data)) {
-					    	$id = $this->User->id;
-					    	$this->Session->setFlash(__('Profile updated successfully.'), 'default', array(), 'good'); 
-				    		$this->redirect( array('controller' => 'Users', 'action' => 'my_profile'));
-					    }else {
-					    	$this->Session->setFlash(__('Unable to Save. Sorry we are having trouble.  Please, try again or contact support.',
-                    'default', array(), 'bad'));
-						}
-				}	
-			    if (empty($this->data)) {
-			    	$userId = $this->Session->read('Auth.User.id');
-			    	$this->request->data = $this->User->read(null, $userId);
-					$this->set('id',$this->data['User']['id']);
+			$this->User->recursive = -1;
+	    	$this->request->data = $this->User->read(null, $this->Session->read('Auth.User.id'));
+	    	$tatoos = $this->Tatoo->find('list');
+	    	if($this->request->data['User']['dob']) {
+	    		list($this->request->data['User']['yy'],$this->request->data['User']['mm'], 
+	    			$this->request->data['User']['dd']) = explode('-', $this->request->data['User']['dob']);
+	    	}
+	    	$this->set('tatoos', $tatoos);
 		}
+		public function profile_save() {
+			$result = array('status' => '0', 'msg' => 'Invalid request.Please try again.');
+			if(!empty($this->request->data)) {
+				if(isset($this->request->data['User']['yy'])) {
+					$dob = $this->request->data['User']['yy'].'-'.$this->request->data['User']['mm'].'-'.
+					$this->request->data['User']['dd'];
+				    $this->request->data['User']['dob'] = $dob;
+				}
+			    if ($this->User->save($this->request->data)) {
+			    	$result = array('status' => '1', 'msg' => 'Profile Saved.Please upload your image');
+			    }else {
+			    	$result = array('status' => '0', 'msg' => 'Unable to Save. Sorry we are having trouble.  
+			    		Please, try again or contact support');
+				}
+			}	
+			$this->set('result', $result);
+        	$this->set('_serialize', array('result')); 
 			
 		}
 
@@ -424,7 +292,8 @@
 
 		if ($this->Auth->login($user['User'])) {
 			if($returning){
-				$this->Session->setFlash(__('Welcome back, '. $this->Auth->user('username')));
+				$this->Session->setFlash(__('Welcome back, '. $this->Auth->user('username')) ,
+                    'default', array(), 'good');
 			} else {
 				$this->Session->setFlash(__('Welcome to our community, '. $this->Auth->user('username')));
 			}

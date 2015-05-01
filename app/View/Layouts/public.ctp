@@ -81,6 +81,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 </html>
 <script type="text/javascript"> 
     $(document).ready(function(){
-        $(".validationengine").validationEngine()   
+    	if($(".validationengine").length) {
+        	$(".validationengine").validationEngine();  
+    	}
     }); 
 </script>

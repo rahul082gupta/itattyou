@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&language=en-AU"></script>
 <div class="col-md-12 col-sm-12 col-xs-12 main_container">
         <div class="col-md-6 col-sm-6 col-xs-12 left_container">
 
@@ -8,6 +9,14 @@
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12 right_container">
             <?php  
+                $exp = array();
+                $k = 0;
+                for($i=1;$i<=50;$i++) {
+                    $exp[] = $k; 
+                    $k = $k+0.5;
+                }
+                $exp_val = array_values($exp);
+                $exp = array_combine($exp_val, $exp);
                 echo $this->Html->image('logo.png', array('class' => 'logo'));
                  echo $this->Form->create('User', array(
                             'id' => "msform", 
@@ -15,7 +24,9 @@
                                 'label' => false,
                                 'div'   => false
                             ),
-                            'class' => 'profile'
+                            'class' => 'validationengine',
+                            'default' => false,
+                            'action' => 'profile_save'
                         )
                     );
             ?>
@@ -32,13 +43,13 @@
                 <fieldset>
                     <h2 class="fs-title"><span class="blk">Create </span>Your Profile</h2>
                     <div class="stepone">
-                    <!-- <input type="text" name="" class="artist artist_name" placeholder="Enter Artist Name" /> -->
                     
                     <?php
-                        echo $this->Form->input('User.studio', array('class' => 'required artist tattoo_name', 'placeholder' => 'Tattoo Studio Name', 'type' => 'text'));
+                        echo $this->Form->hidden('User.id');
+                        echo $this->Form->input('User.name', array('class' => 'validate[required] artist artist_name', 'placeholder' => 'Enter Artist Name', 'type' => 'text'));
+                        echo $this->Form->input('User.studio', array('class' => 'validate[required] artist tattoo_name', 'placeholder' => 'Tattoo Studio Name', 'type' => 'text'));
                     ?>
-                    <p id="err_studio" class="error" style="display: <?php echo isset( $error['studio'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['studio'][0])) echo $error['studio'][0]; ?></p>
-
+                   
                         <div class="col-md-7 col-sm-5 col-xs-12 p0">
                            
 
@@ -48,51 +59,63 @@
                                 </div>
                                 <div class="col-md-2 col-sm-2 col-xs-2 p0">
                                       <?php
-                                        echo $this->Form->input('dd', array('class' => 'dob_space', 'placeholder' => 'DD', 'type' => 'text'));
+                                        echo $this->Form->input('dd', array('class' => 'validate[minSize[2], maxSize[2]] dob_space', 'placeholder' => 'DD', 'type' => 'text'));
                                     ?>
                                 </div>
                                 <div class="col-md-2 col-sm-2 col-xs-2 p0">
 
                                     <?php
-                                        echo $this->Form->input('mm', array('class' => 'dob_space', 'placeholder' => 'MM', 'type' => 'text'));
+                                        echo $this->Form->input('mm', array('class' => 'validate[minSize[2], maxSize[2]] dob_space', 'placeholder' => 'MM', 'type' => 'text'));
                                     ?>
                                    
                                 </div>
                                  <div class="col-md-3 col-sm-3 col-xs-3 p0">
                                       <?php
-                                        echo $this->Form->input('yy', array('class' => 'dob_space', 'placeholder' => 'YYYY', 'type' => 'text'));
+                                        echo $this->Form->input('yy', array('class' => 'validate[minSize[4], maxSize[4]] dob_space', 'placeholder' => 'YYYY', 'type' => 'text'));
                                     ?>
                                 </div>
-                                 <p id="err_yy" class="error" style="display: <?php echo isset( $error['yy'][0] ) ? 'block' : 'none' ?> "><?php if(isset($error['yy'][0])) echo $error['yy'][0]; ?></p>
                             </div>
                         </div>
 
                         <div class="col-md-5 col-sm-5 col-xs-12 exp_box">
                             <div class="col-md-3 col-sm-3 col-xs-3 dob_text">Exp:</div>
                             <div class="col-md-9 col-sm-3 col-xs-3 dob_text">
-                                <select class="select_exp">
+                                <!-- <select class="select_exp">
                                     <option>Select Exp</option>
                                     <option>Select one</option>
-                                </select>
+                                </select> -->
+                                 <?php
+                                        echo $this->Form->input('experience', array('class' => 'validate[required] select_exp', 'empty' => 'Select Exp', 'type' => 'select', 'div' => false ,'label' => false, 'options' => $exp));
+                                    ?>
                             </div>
                         </div>
                         
-                        <input type="text" name="" class="artist art_icon" placeholder="Art Speciality" />
-
+                         <?php
+                                echo $this->Form->input('tatoo_id', array('class' => 'validate[required] artist art_icon', 'placeholder' => 'Art Speciality', 'type' => 'text'));
+                            ?>
                         <div class="col-md-5 col-sm-5 col-xs-12 p0">
-                            <input type="text" name="" class="artist contact_num" placeholder="Contact Number"/>
+                            
+                            <?php
+                                echo $this->Form->input('contact', array('class' => 'validate[minSize[10], maxSize[10]] artist contact_num', 'placeholder' => 'Contact Number', 'type' => 'text'));
+                            ?>
                         </div>
 
                         <div class="col-md-7 col-sm-7 col-xs-12 p0">
-                            <input type="text" name="" class="artist email_icon" placeholder="Enter Email"/>
+                           
+                             <?php
+                                echo $this->Form->input('username', array('class' => 'validate[required, custom[email]] artist email_icon', 'placeholder' => 'Enter Email', 'type' => 'text' ,'disabled' => true));
+                            ?>
                         </div>
                         
                         
-                        <textarea placeholder="Address" class="artist address_icon"></textarea>
+                        
+                        <?php
+                            echo $this->Form->input('address', array('class' => 'artist addressmap address_icon', 'placeholder' => 'Address', 'type' => 'text'));
+                        ?>
 
                     </div>
                     <!--input type="button" name="next" class="next action-button button_over" value="COMPLETED & NEXT" /-->
-                    <?php echo $this->Form->submit('COMPLETED & NEXT',array('id'=>'YourButtonName','class'=>'next action-button button_over','onclick'=>'your onclick function'));?>
+                    <?php echo $this->Form->submit('COMPLETED & NEXT',array('id'=>'YourButtonName','class'=>'next action-button button_over btnSubmit'));?>
                 </fieldset>
                  <?php $this->Form->end();?>
                 <?php  
@@ -118,11 +141,7 @@
                      <?php
                             echo $this->Form->button(__('FINISH'), array(
                                 'class' => 'button_over action-button',
-                                'div' => false,
-                                'onclick'=> "return ajax_form_submit('profile',
-                                    'Users/validate_user_profile_ajax',
-                                    'registrationWait'
-                                ) "
+                                'div' => false
                             )
                         );
                     ?>
@@ -132,15 +151,43 @@
     </div>
 
 
-        <script>
+<script>
     $(function() {
+
+    var autocomplete = new google.maps.places.Autocomplete($(".addressmap")[0], {});
+    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {
+        var place = autocomplete.getPlace();
+    });
+
+    $(document.body).on("click", ".btnSubmit", function(e) {
+        e.preventDefault();
+        var form = $(this).parents('form');
+        $.ajax({
+            type: "POST",
+            url: '<?php echo HTTP_ROOT;?>Users/profile_save.json',
+            data: form.serialize(),
+            success: function(response){  
+                $('div.container.container_error').remove();       
+                if(response.result.status == '1') {
+                    $('div#content').prepend("<div class='container container_error'><div class='row'><div data-alert class='alert alert-error alert-success'>"+ response.result.msg +"<button type='button' class='close' data-dismiss='alert'>×</button></div></div></div>");
+                    $(".next11").trigger('click');
+                 } else {
+                    $('div#content').prepend("<div class='container container_error'><div class='row'><div data-alert class='alert alert-error alert-danger'>"+ response.result.msg +"<button type='button' class='close' data-dismiss='alert'>×</button></div></div></div>");
+                }
+                $(window).scrollTop(0,0);
+            }
+        });
+    });
+
 
     //jQuery time
     var current_fs, next_fs, previous_fs; //fieldsets
     var left, opacity, scale; //fieldset properties which we will animate
     var animating; //flag to prevent quick multi-click glitches
 
-    $(".next").click(function(){
+  
+    $(document.body).on('click', '.next11', function(e) {
+        //e.preventDefault();
         if(animating) return false;
         animating = true;
         
