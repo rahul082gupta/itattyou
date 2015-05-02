@@ -132,7 +132,7 @@
                         echo $this->Html->image('hi.png');
                     ?>
                     <br>
-                    <span><?php echo $this->Session->read('Auth.User.name');?></span>
+                    <span class="namebox"><?php echo $this->Session->read('Auth.User.name');?></span>
                     </h3>
 
                     <div class="img_upload_container">
@@ -178,6 +178,7 @@
             success: function(response){  
                 $('div.container.container_error').remove();       
                 if(response.result.status == '1') {
+                    $('.namebox').text(response.result.name);
                     $('div#content').prepend("<div class='container container_error'><div class='row'><div data-alert class='alert alert-error alert-success'>"+ response.result.msg +"<button type='button' class='close' data-dismiss='alert'>×</button></div></div></div>");
                     $(".next11").trigger('click');
                  } else {

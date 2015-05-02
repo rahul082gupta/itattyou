@@ -140,7 +140,8 @@
 			    if ($this->User->save($this->request->data)) { 
 			    	$this->request->data = array_merge($this->Auth->user(), $this->request->data['User']);
 			    	$this->Auth->login($this->request->data);
-			    	$result = array('status' => '1', 'msg' => 'Profile Saved.Please upload your image');
+			    	$result = array('status' => '1', 'msg' => 'Profile Saved.Please upload your image','name' =>
+			    		$this->request->data['name']);
 			    }else {
 			    	$result = array('status' => '0', 'msg' => 'Unable to Save. Sorry we are having trouble.  
 			    		Please, try again or contact support');
