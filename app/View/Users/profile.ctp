@@ -116,6 +116,7 @@
                     </div>
                     <!--input type="button" name="next" class="next action-button button_over" value="COMPLETED & NEXT" /-->
                     <?php echo $this->Form->submit('COMPLETED & NEXT',array('id'=>'YourButtonName','class'=>'next action-button button_over btnSubmit'));?>
+                    <a href = 'javascript:void(0)' class = 'next11' style="display:none;"> click</a>
                 </fieldset>
                  <?php $this->Form->end();?>
                 <?php  
@@ -125,13 +126,21 @@
 
                 <fieldset>
                     
-                    <h3 class="fs-title"><img src="img/hi.png"><br>Name Kumar</h3>
+                    <h3 class="fs-title">
+                    <?php 
+                        echo $this->Form->hidden('User.id');
+                        echo $this->Html->image('hi.png');
+                    ?>
+                    <br>
+                    <span><?php echo $this->Session->read('Auth.User.name');?></span>
+                    </h3>
 
                     <div class="img_upload_container">
-                        <img src="img/user_image.png" class="img-responsive m0auto">
+                        <?php echo $this->Html->image('user_image.png', array('class' => 'img-responsive m0auto'));?>
 
                         <div style="position: relative;">
-                            <img src="img/uplaod_image.png" width="50" height="50" alt="" class="myAvatar" style="position:absolute; top:0;  z-index:1; top: -67px;  right: 103px;" />
+                            
+                            <?php echo $this->Html->image('uplaod_image.png', array('class' => 'myAvatar', 'style' => 'position:absolute; top:0;  z-index:1; top: -67px;  right: 103px;', 'width' => '50', 'height' => '50'));?>
                             <input type="file" name="newAvatar" id="newAvatar" style="width:50px; height:50px; position:absolute; top:0px;  z-index:2; opacity:0;top: -67px;  right: 103px; cursor:pointer;" />
                         </div>
                     </div>
@@ -185,13 +194,13 @@
     var left, opacity, scale; //fieldset properties which we will animate
     var animating; //flag to prevent quick multi-click glitches
 
-  
+ 
     $(document.body).on('click', '.next11', function(e) {
         //e.preventDefault();
         if(animating) return false;
         animating = true;
         
-        current_fs = $(this).parent();
+        current_fs = $(this).parents('fieldset');
         next_fs = $('.main_container').find('fieldset').eq('1'); 
         
         //activate next step on progressbar using the index of next_fs
@@ -257,7 +266,7 @@
         });
     });
 
-    
+     //$(".next11").trigger('click');
 
     });
     </script>

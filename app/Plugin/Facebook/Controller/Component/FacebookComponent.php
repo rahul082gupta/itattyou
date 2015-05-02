@@ -17,7 +17,9 @@ use Facebook\FacebookRequestException;
 use Facebook\FacebookAuthorizationException;
 use Facebook\GraphObject;
 use Facebook\GraphUser; 
-//session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 class FacebookComponent extends Component {
 	public $facebookObj;
 	public $facebookSession;
@@ -74,7 +76,8 @@ class FacebookComponent extends Component {
 		if ($session) { 
 			$_SESSION['accessToken'] = $session->getToken();
 		} else {
-		  $this->Controller->redirect($helper->getLoginUrl(array('user_status, publish_stream, user_photos, user_events, manage_pages,user_videos,read_stream')));
+		  $this->Controller->redirect($helper->getLoginUrl(array('user_status, 
+		  	publish_stream, user_photos, user_events, manage_pages,user_videos,read_stream')));
 		}
 	}
 

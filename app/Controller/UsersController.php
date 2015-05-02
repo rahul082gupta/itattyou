@@ -117,7 +117,7 @@
 			$this->set(compact('title_for_layout'));
 		}
 
-		public function profile() {
+		public function profile() { 
 			$this->loadModel('Tatoo');
 			$this->layout = 'public';
 			$this->User->recursive = -1;
@@ -137,12 +137,15 @@
 					$this->request->data['User']['dd'];
 				    $this->request->data['User']['dob'] = $dob;
 				}
-			    if ($this->User->save($this->request->data)) {
+			    if ($this->User->save($this->request->data)) { 
+			    	$this->request->data = array_merge($this->Auth->user(), $this->request->data['User']);
+			    	$this->Auth->login($this->request->data);
 			    	$result = array('status' => '1', 'msg' => 'Profile Saved.Please upload your image');
 			    }else {
 			    	$result = array('status' => '0', 'msg' => 'Unable to Save. Sorry we are having trouble.  
 			    		Please, try again or contact support');
 				}
+				
 			}	
 			$this->set('result', $result);
         	$this->set('_serialize', array('result')); 
@@ -182,7 +185,7 @@
 				    	$this->redirect(array('controller' => 'Users', 'action' => 'signup'));
 	                }
 	        	} else {
-	                $login_url = $this->Facebook->fbLogin(HTTP_ROOT.'/Users/fblogin');
+	                $login_url = $this->Facebook->fbLogin(HTTP_ROOT.'Users/fblogin');
 	                die;
 	            }
            	} else {
@@ -218,12 +221,7 @@
 		}
 
 	public function logout() {
-		   
-			$this->Session->destroy();
-			$this->Auth->logout();
-		   
-			$this->redirect($this->Auth->logout());
-    	
+		$this->redirect($this->Auth->logout());
 	}
         
         //START  GOOGLE LOGIN
