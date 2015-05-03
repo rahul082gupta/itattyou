@@ -24,7 +24,8 @@
 								'ArtistArt' => array('fields' => array('image')),
 								'ArtistVideo' => array('fields' => array('video', 'type')),
 								'ArtistFollower' => array('follower_id', 'id'), 
-								'ArtistFollowing' => array('following_id', 'id')
+								'ArtistFollowing' => array('following_id', 'id'),
+								'Tatoo' => array('name', 'id')
 							)
 						)
 					);

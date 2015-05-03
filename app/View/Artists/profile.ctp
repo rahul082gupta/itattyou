@@ -182,21 +182,30 @@
 
         <div class="col-md-12 col-sm-12 col-xs-12 right_part">
             <div class="user_image_in">
-                
-                 <?php echo $this->Html->image($artistInfo['Artist']['photo'], array('class' => 'img-responsive', 'width' => '150'));?>
+                <?php 
+                    if($artistInfo['Artist']['photo'] &&  strpos($artistInfo['Artist']['photo'], 'http')) {
+                        echo $this->Html->image($artistInfo['Artist']['photo'], array('class' => 'img-responsive', 'width' => '150'));
+                    }elseif($artistInfo['Artist']['photo']) {
+                         echo $this->Html->image('/uploads/'.$artistInfo['Artist']['photo'], array('class' => 'img-responsive', 'width' => '150'));
+                    }else {
+                        
+                        echo $this->Html->image('user_image.png', array('class' => 'img-responsive', 'width' => '150'));
+
+                    }
+                ?>
             </div>
 
             <h2><?php echo $artistInfo['Artist']['name'];?></h2>
-            <h3><?php echo $artistInfo['Artist']['speciality'];?></h3>
+            <h3><?php echo $artistInfo['Tatoo']['name'];?></h3>
             <hr>
             <h4><?php echo $artistInfo['Artist']['studio'];?></h4>
             <h5><?php echo $artistInfo['Artist']['address'];?></h5>
             <h1><?php echo $artistInfo['Artist']['contact'];?></h1>
             <h5><?php echo $artistInfo['Artist']['website'];?> </h5>
-            <!-- <iframe width="100%" height="150"  frameborder="0" style="border:0"
+            <iframe width="100%" height="150"  frameborder="0" style="border:0"
           src="https://www.google.com/maps/embed/v1/place?key=<?php echo GOOGLE_API_KEY;?>
             &q=<?php echo $artistInfo['Artist']['address'] ?>" >
-            </iframe> -->
+            </iframe>
 
             <hr>
 

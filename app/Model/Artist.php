@@ -22,5 +22,12 @@ App::uses('AppModel', 'Model');
 	    		'foreignkey' => 'user_id'
     		),
     	);
+
+    	public $belongsTo = array(
+    			'Tatoo' => array(
+    				'className' => 'Tatoo',
+	    			'foreignkey' => 'tatoo_id'
+				)
+			);
 	}
 ?>

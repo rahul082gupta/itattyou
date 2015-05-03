@@ -1,7 +1,7 @@
 <?php
 	class UsersController extends AppController {
 
-	    public $components = array('Hybridauth');
+	    public $components = array('Hybridauth', 'Upload');
 		public function beforeFilter() {
 			parent::beforeFilter();
 			$this->Auth->allow('signup', 'activate', 'login', 
@@ -126,7 +126,7 @@
 	    	if($this->request->data['User']['dob']) {
 	    		list($this->request->data['User']['yy'],$this->request->data['User']['mm'], 
 	    			$this->request->data['User']['dd']) = explode('-', $this->request->data['User']['dob']);
-	    	}
+	    	} 
 	    	$this->set('tatoos', $tatoos);
 		}
 		public function profile_save() {
@@ -140,7 +140,7 @@
 			    if ($this->User->save($this->request->data)) { 
 			    	$this->request->data = array_merge($this->Auth->user(), $this->request->data['User']);
 			    	$this->Auth->login($this->request->data);
-			    	$result = array('status' => '1', 'msg' => 'Profile Saved.Please upload your image','name' =>
+			    	$result = array('status' => '1', 'msg' => 'Profile saved successfully.','name' =>
 			    		$this->request->data['name']);
 			    }else {
 			    	$result = array('status' => '0', 'msg' => 'Unable to Save. Sorry we are having trouble.  
@@ -151,6 +151,53 @@
 			$this->set('result', $result);
         	$this->set('_serialize', array('result')); 
 			
+		}
+
+		public function profile_image() {
+			$result = array('status' => '0', 'msg' => 'Please upload valid image extensions jpeg, jpg and png.');
+			$user = $this->User->find('first', array(
+							'conditions' => array('id' => $this->Auth->user('id')),
+							'contain' => false,
+							'fields' => array('id', 'photo')
+						)); 
+			if($_FILES["file"]['name'] == "" && $user['User']['photo']) {
+				$this->Session->setFlash(__('Image updated successfully.'),
+	    			 		'default', array(), 'good');
+				$result = array('status' => '1', 'msg' => '');
+			}elseif(isset($_FILES["file"]["type"])) {
+				$validextensions = array("jpeg", "jpg", "png");
+				$temporary = explode(".", $_FILES["file"]["name"]);
+				$file_extension = end($temporary);
+				if ( (($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/jpg") 
+					|| ($_FILES["file"]["type"] == "image/jpeg")) && ($_FILES["file"]["size"] < 2097152)//Approx. 2Mb files can be uploaded.
+					&& in_array($file_extension, $validextensions)) {
+					if ($_FILES["file"]["error"] > 0){
+						$result['msg'] =  $_FILES["file"]["error"];
+					} else { 
+						$destination = realpath('../../app/webroot/uploads') . '/';
+						$filename = time().'-'.$_FILES['file']['name'];				
+						
+						$old_image = $user['User']['photo'];
+						$file = $_FILES['file'];
+						$result1 = $this->Upload->upload($file, $destination, $filename, array());
+						$data['User']['id']=$this->Auth->user('id');
+						$data['User']['photo']= $filename;
+						if($this->User->save($data)) {
+							$result = array('status' => '1', 'msg' => '');
+							$this->Session->setFlash(__('Image updated successfully.'),
+	    			 		'default', array(), 'good');
+						}
+						if($result1)
+						{					
+							unlink('uploads/'.$old_image);
+						}
+					}
+				} else {
+					$result['msg'] = 'Please upload valid image extensions jpeg, jpg and png.Size of image should be less then 2MB.';
+				}
+			}
+			$this->set('result', $result);
+        	$this->set('_serialize', array('result'));
 		}
 
 		public function page() {
