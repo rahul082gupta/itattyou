@@ -6,8 +6,7 @@
 
 		public function profile($id = null) {
 			if($id) {
-				$url = 'https://www.youtube.com/watch?v=JtZa58nP2Qo&v=ghjd';
-
+				
 				$id = base64_decode($id);
 				$this->layout = 'public';
 				if(!$this->Artist->exists($id)) {
@@ -77,6 +76,56 @@
 			}
 			$this->set('result', $result);
         	$this->set('_serialize', array('result'));
+		}
+
+		public function summary() {
+			if($this->request->is('post')) {
+				if($this->Artist->save($this->request->data)) {
+					$this->Session->setFlash(__('Profile updated successfully.'),
+	    			 		'default', array(), 'good');
+				}else {
+					$this->Session->setFlash(__('Sorry, Can not update profile. Please, try again.',
+	                    'default', array(), 'bad'));
+				}
+			}
+			if($this->Auth->user('id')) {
+				$this->layout = 'public';
+				$id = $this->Auth->user('id');
+				
+				if(!$this->Artist->exists($id)) {
+					$this->Session->setFlash(__('Sorry, This artist is not visible. Please, try again.',
+	                    'default', array(), 'bad'));
+				} else {
+					$this->request->data = $this->Artist->find('first',
+						array(
+							'conditions' => array(
+								'Artist.id' => $id
+							),
+							'contain' => array(
+								'ArtistArt' => array('fields' => array('image')),
+								'ArtistVideo' => array('fields' => array('video', 'type')),
+								'ArtistFollower' => array('follower_id', 'id'), 
+								'ArtistFollowing' => array('following_id', 'id'),
+								'Tatoo' => array('name', 'id')
+							)
+						)
+					);
+					
+				}
+				if(isset($this->request->data['ArtistVideo']) && $this->request->data['ArtistVideo']) {
+					foreach($this->request->data['ArtistVideo'] as &$video) {
+						if($video['type'] == 1) {
+							$url = explode('&',$video['video']);
+							$v_id = explode('=',$url['0']);
+							$video['video'] = 'http://youtube.com/embed/'.$v_id['1'];
+						}
+					}
+				}
+				
+			} else {
+				$this->Session->setFlash(__('Invalid request. Please, try again.',
+	                    'default', array(), 'bad'));
+			}
 		}
 	}
 ?>

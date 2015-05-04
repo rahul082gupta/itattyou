@@ -937,3 +937,30 @@ content: none;
     height: 90px;
     width: 100%;
 }
+
+
+.artist_profile {
+    position: relative !important;
+}
+
+.artist_profile:hover button {
+    display: block;
+}
+
+.close_img {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    outline: none;
+    display: none;
+    border: none;
+    background: none;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.tooltip-inner {
+    max-width: 200px;
+    width: 200px;
+    font-size: 12px;
+}
